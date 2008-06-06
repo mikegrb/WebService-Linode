@@ -20,6 +20,8 @@ Version 0.01
 =cut
 
 our $VERSION = '0.01';
+our $err;
+our $errstr;
 
 sub new {
 	my ($package, %args) = @_;
@@ -28,11 +30,12 @@ sub new {
 	croak "Must specify API key." unless exists ($args{apikey});
 
 	$self->{_apikey}	= $args{apikey};
+
 	$self->{_nocache}	= $args{nocache}	|| 0;
 	$self->{_debug}		= $args{debug}		|| 0;
-
-	# this shouldn't need to be changed but who knows
-	$self->{_apiurl} = 'http://lindev1.linlan/api/';
+	$self->{_fatal}		= $args{fatal}		|| 0;
+	$self->{_nowarn}	= $args{nowarn}		|| 0;
+	$self->{_apiurl}	= $args{apiurl}	|| 'https://www.linode.com/api/';
 
 	$self->{_ua} = LWP::UserAgent->new;
 	$self->{_ua}->agent("WebService::Linode/$WebService::Linode::VERSION ");
@@ -41,11 +44,31 @@ sub new {
 	return $self;
 }
 
-sub listDomains {
+sub getDomainIDbyName {
 	my $self = shift;
-	$self->_debug(10, 'listDomains called');
+	my $name = shift;
+	$self->_debug(10, 'getDomainIDbyName called for: ' . $name);
 
-	my $data = $self->_do_request( action => 'listDomains' );
+	if ($self->{_nocache}) {
+		$self->_debug(10, 'Cache disabled calling domainList');
+		my $domains = $self->domainList();
+		foreach my $domain (@$domains) {
+			return $domain->{domainid} if $domain->{domain} eq $name;
+		}
+	}
+	else {
+		$self->domainList unless exists($self->{_domains}{$name});
+		return $self->{_domains}{$name} if exists($self->{_domains}{$name});
+	}
+
+	return;
+}
+
+sub domainList {
+	my $self = shift;
+	$self->_debug(10, 'domainList called');
+
+	my $data = $self->_do_request( action => 'domainList' );
 	if (defined($data)) {
 		my @domains;
 		for my $domain (@$data) {
@@ -57,39 +80,17 @@ sub listDomains {
 		}
 		return \@domains;
 	}
-
 	return;
 }
 
-sub getDomainIDbyName {
-	my $self = shift;
-	my $name = shift;
-	$self->_debug(10, 'getDomainIDbyName called for: ' . $name);
-
-
-	if ($self->{_nocache}) {
-		$self->_debug(10, 'Cache disabled calling listDomains');
-		my $domains = $self->listDomains();
-		foreach my $domain (@$domains) {
-			return $domain->{domainid} if $domain->{domain} eq $name;
-		}
-	}
-	else {
-		$self->listDomains unless exists($self->{_domains}{$name});
-		return $self->{_domains}{$name} if exists($self->{_domains}{$name});
-	}
-
-	return;
-}
-
-sub getDomain {
+sub domainGet {
 	my ($self, %args) = @_;
-	$self->_debug(10, 'getDomain called');
+	$self->_debug(10, 'domainGet called');
 	my $domainid;
 
 	if ($args{domain}) {
 		$domainid = $self->getDomainIDbyName($args{domain});
-		carp "$args{domain} does not exist." unless $domainid;
+		$self->_error(-1, "$args{domain} not found") unless $domainid;
 		return unless $domainid;
 	}
 	else {
@@ -97,13 +98,103 @@ sub getDomain {
 	}
 
 	unless (defined ($domainid)) {
-		carp "Must pass domain id or name to getDomain.";
+		$self->_error(-1, 'Must pass domainid or domain to domainGet');
 		return;
 	}
 
-	my $data = $self->_do_request( action => 'getDomain', domainid => $domainid );
+	my $data = $self->_do_request( action => 'domainGet', domainid => $domainid );
 
 	return _lc_keys($data);
+}
+
+sub domainSave {
+	my ($self, %args) = @_;
+	$self->_debug(10, 'domainSave called');
+
+	if (!exists ($args{domainid})) {
+		$self->_error(-1, "Must pass domainid to domainSave");
+		return;
+	}
+
+	my $data = $self->_do_request( action => 'domainSave', %args);
+
+	return unless exists ($data->{DomainID});
+	return $data->{DomainID};
+}
+
+sub domainResourceList {
+	my ($self, %args) = @_;
+	$self->_debug(10, 'domainResourceList called');
+	my $domainid;
+
+	if ($args{domain}) {
+		$domainid = $self->getDomainIDbyName($args{domain});
+		$self->_error(-1, "$args{domain} not found") unless $domainid;
+		return unless $domainid;
+	}
+	else {
+		$domainid = $args{domainid}
+	}
+
+	unless (defined ($domainid)) {
+		$self->_error(-1, 'Must pass domainid or domain to domainResourceList');
+		return;
+	}
+
+	my $data = $self->_do_request( action => 'domainResourceList', domainid => $domainid );
+
+	if (defined($data)) {
+		my @RRs;
+		push @RRs, _lc_keys($_) for (@$data);
+		return \@RRs;
+	}
+
+	return;
+}
+
+sub domainResourceGet {
+	my ($self, %args) = @_;
+	$self->_debug(10, 'domainResourceGet called');
+	my $domainid;
+
+	if ($args{domain}) {
+		$domainid = $self->getDomainIDbyName($args{domain});
+		$self->_error(-1, "$args{domain} not found") unless $domainid;
+		return unless $domainid;
+	}
+	else {
+		$domainid = $args{domainid}
+	}
+
+	unless (defined ($domainid) && exists ($args{resourceid})) {
+		$self->_error(-1, 'Must pass domainid or domain and resourceid domainResourceGet');
+		return;
+	}
+
+	my $data = $self->_do_request(
+		action => 'domainResourceGet',
+		domainid => $domainid,
+		resourceid => $args{resourceid},
+	);
+
+	return unless defined ($data);
+
+	return _lc_keys($data);
+}
+
+sub domainResourceSave {
+	my ($self, %args) = @_;
+	$self->_debug(10, 'domainResourceSave called');
+
+	if (!(exists ($args{domainid}) && exists ($args{resourceid}))) {
+		$self->_error(-1, "Must pass domainid and resourceid to domainResourceSave");
+		return;
+	}
+
+	my $data = $self->_do_request( action => 'domainResourceSave', %args);
+
+	return unless exists ($data->{ResourceID});
+	return $data->{ResourceID};
 }
 
 sub _lc_keys {
@@ -116,12 +207,13 @@ sub _do_request {
 	my ($self, %args) = @_;
 
 	my $response = $self->_send_request(%args);
-	
 	return $self->_parse_response($response);
 }
 
 sub _send_request {
 	my ($self, %args) = @_;
+
+	$self->_debug(10, "About to send request: " . join(' ' , %args));
 
 	return $self->{_ua}->post(
 		$self->{_apiurl}, content => {api_key => $self->{_apikey}, %args }
@@ -132,18 +224,39 @@ sub _parse_response {
 	my $self = shift;
 	my $response = shift;
 
-	if ($response->content =~ m|<json>(.*?)</json>|i) {
-		my $json = from_json($1);
+	if ($response->content =~ m|ERRORARRAY|i) {
+		my $json = from_json($response->content);
 		if ($json->{REQUESTSTATUS} == 0) {
 			return $json->{DATA};
 		} else {
-			warn "Crap!";
+			# TODO this only returns the first error from the API
+	
+			my $msg = "API Error " . 
+				$json->{ERRORARRAY}->[0]->{ERRORCODE} .  ": " .
+				$json->{ERRORARRAY}->[0]->{ERRORMESSAGE};
+
+			$self->_error(
+				$json->{ERRORARRAY}->[0]->{ERRORCODE},
+				$msg
+			);
 			return;
 		}
 	} else {
-		warn "No JSON retruned, oh noes.";
+		$self->_error(-1, 'No JSON found');
 		return;
 	}
+}
+
+sub _error {
+	my $self = shift;
+	my $code = shift;
+	my $msg  = shift;
+
+	$err = $code;
+	$errstr = $msg;
+
+	croak $msg if $self->{_fatal};
+	carp $msg unless $self->{_nowarn};
 }
 
 sub _debug {
@@ -171,23 +284,63 @@ Example usage:
 
 =head2 new
 
-verbose 0-10, apikey, nocache
+All methods take the same parameters as the Linode API itself does.  Field
+names should be lower cased.  All caps fields from the Linode API will be
+lower cased before returning the data.
 
-=head2 listDomains
+TODO: actual docs
+verbose 0-10, apikey, nocache, fatal, nowarn, apiurl
+
+Errors mirror the perl DBI error handling method.
+$WebService::Linode::err and ::errstr will be populated with the last error
+number and string that occurred.  All errors generated within the module
+are currently error code -1.  By default, will warn on errors as well, pass
+a true value for fatal to die instead or nowarn to prevent the warnings.
+
+verbose is 0-10 with 10 being the most and 0 being none
+
+nocache disables some cacheing of domainname -> domainid
+
+=head2 domainList
 
 Returns a reference to an array.  The array contains one entry per domain
 containing a reference to a hash with the data for that domain.  Keys in the
 hash use the same names returned by the Linode API though the names have been
 converted to lower-case.
 
-=head2 getDomain
+=head2 domainGet
 
+Requires domainid or domain passed in as args.  'domain' is the name of the
+zone and will be mapped to domainid before executing the API method.
 Returns a reference to a hash.  The hash contains the data for the domain
 returned by the Linode API with the keys lower cased.
 
 =head2 getDomainIDbyName
 
 Returns the ID for a domain given the name.
+
+=head2 domainSave
+
+Requires domainid, use 0 to create a domain.
+
+=head2 domainResourceList
+
+Requires domainid or domain passed in as args.  'domain' is the name of the
+zone and will be mapped to domainid before executing the API method. 
+Returns a reference to an array.  The array contains one entry per domain
+containing a reference to a hash with the data for that domain.  Keys in the
+hash use the same names returned by the Linode API though the names have been
+converted to lower-case.
+
+=head2 domainResourceGet
+
+Requires domainid and resourceid.
+Returns a reference to a hash.  The hash contains the data for the resource
+record returned by the Linode API with the keys lower cased.
+
+=head2 domainResourceSave
+
+Requires domainid and resourceid.  Use 0 for resourceid to create.
 
 =head1 AUTHOR
 
