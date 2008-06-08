@@ -7,7 +7,7 @@ use Carp;
 use JSON;
 use LWP::UserAgent;
 
-use Data::Dumper
+use Data::Dumper;
 
 =head1 NAME
 
