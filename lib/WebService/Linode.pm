@@ -75,7 +75,8 @@ sub domainList {
 			# lower case the keys (they come all caps)
 			my $domain_data = _lc_keys($domain);
 			# store zone id in $self->{_domains}{[name]}
-			$self->{_domains}{$domain_data->{domain}} = $domain_data->{domainid} unless $self->{_nocache};
+			$self->{_domains}{$domain_data->{domain}} = 
+				$domain_data->{domainid} unless $self->{_nocache};
 			push @domains, $domain_data;
 		}
 		return \@domains;
@@ -102,7 +103,9 @@ sub domainGet {
 		return;
 	}
 
-	my $data = $self->_do_request( action => 'domainGet', domainid => $domainid );
+	my $data = $self->_do_request(
+		action => 'domainGet', domainid => $domainid
+	);
 
 	return _lc_keys($data);
 }
@@ -117,6 +120,38 @@ sub domainSave {
 	}
 
 	my $data = $self->_do_request( action => 'domainSave', %args);
+
+	return unless exists ($data->{DomainID});
+	return $data->{DomainID};
+}
+
+sub domainUpdate {
+	my ($self, %args) = @_;
+	$self->_debug(10, 'domainUpdate called');
+
+	if (!exists ($args{domainid})) {
+		$self->_error(-1, "Must pass domainid to domainUpdate");
+		return;
+	}
+
+	my %data = %{ $self->domainGet(domainid => $args{domainid}) };
+
+	# overwrite changed items
+	$data{$_} = $args{$_} for keys (%args);
+
+	return $self->domainSave(%data);
+}
+
+sub domainDelete {
+	my ($self, %args) = @_;
+	$self->_debug(10, 'domainDelete called');
+
+	if (!exists ($args{domainid})) {
+		$self->_error(-1, "Must pass domainid to domainDelete");
+		return;
+	}
+
+	my $data = $self->_do_request( action => 'domainDelete', %args);
 
 	return unless exists ($data->{DomainID});
 	return $data->{DomainID};
@@ -141,7 +176,9 @@ sub domainResourceList {
 		return;
 	}
 
-	my $data = $self->_do_request( action => 'domainResourceList', domainid => $domainid );
+	my $data = $self->_do_request(
+		action => 'domainResourceList', domainid => $domainid
+	);
 
 	if (defined($data)) {
 		my @RRs;
@@ -157,17 +194,9 @@ sub domainResourceGet {
 	$self->_debug(10, 'domainResourceGet called');
 	my $domainid;
 
-	if ($args{domain}) {
-		$domainid = $self->getDomainIDbyName($args{domain});
-		$self->_error(-1, "$args{domain} not found") unless $domainid;
-		return unless $domainid;
-	}
-	else {
-		$domainid = $args{domainid}
-	}
-
-	unless (defined ($domainid) && exists ($args{resourceid})) {
-		$self->_error(-1, 'Must pass domainid or domain and resourceid domainResourceGet');
+	unless (exists ($args{resourceid})) {
+		$self->_error(-1, 
+			'Must pass domainid or domain and resourceid domainResourceGet');
 		return;
 	}
 
@@ -182,16 +211,68 @@ sub domainResourceGet {
 	return _lc_keys($data);
 }
 
+sub getResourceIDbyName {
+	my ($self, %args) = @_;
+	$self->_debug(10, 'getResourceIDbyName called');
+
+	my $domainid = $args{domainid};
+	if (!exists ($args{domainid}) && exists($args{domain}) ) {
+		$domainid = $self->getDomainIDbyName($args{domain});
+	}
+	
+	if (!(defined($domainid) && exists($args{name}))) {
+		$self->_error(-1,
+			'Must pass domain or domainid and (resource) name to getResourceIDbyName');
+		return;
+	}
+
+	for my $rr ( @{ $self->domainResourceList(domainid => $domainid) } ) {
+		return $rr->{resourceid} if $rr->{name} eq $args{name};
+	}
+}
+
 sub domainResourceSave {
 	my ($self, %args) = @_;
 	$self->_debug(10, 'domainResourceSave called');
 
-	if (!(exists ($args{domainid}) && exists ($args{resourceid}))) {
-		$self->_error(-1, "Must pass domainid and resourceid to domainResourceSave");
+	if (!exists ($args{resourceid})) {
+		$self->_error(-1, "Must pass resourceid to domainResourceSave");
 		return;
 	}
 
 	my $data = $self->_do_request( action => 'domainResourceSave', %args);
+
+	return unless exists ($data->{ResourceID});
+	return $data->{ResourceID};
+}
+
+sub domainResourceUpdate {
+	my ($self, %args) = @_;
+	$self->_debug(10, 'domainResourceUpdate called');
+
+	if (!exists ($args{resourceid})) {
+		$self->_error(-1, "Must pass resourceid to domainResourceUpdate");
+		return;
+	}
+
+	my %data = %{ $self->domainResourceGet(resourceid => $args{resourceid}) };
+
+	# overwrite changed items
+	$data{$_} = $args{$_} for keys (%args);
+
+	return $self->domainResourceSave(%data);
+}
+
+sub domainResourceDelete {
+	my ($self, %args) = @_;
+	$self->_debug(10, 'domainResourceDelete called');
+
+	if (!exists ($args{resourceid})) {
+		$self->_error(-1, "Must pass resourceid to domainResourceDelete");
+		return;
+	}
+
+	my $data = $self->_do_request( action => 'domainResourceDelete', %args);
 
 	return unless exists ($data->{ResourceID});
 	return $data->{ResourceID};
@@ -213,7 +294,10 @@ sub _do_request {
 sub _send_request {
 	my ($self, %args) = @_;
 
-	$self->_debug(10, "About to send request: " . join(' ' , %args));
+	{
+		local $SIG{__WARN__} = sub {};
+		$self->_debug(10, "About to send request: " . join(' ' , %args));	
+	}
 
 	return $self->{_ua}->post(
 		$self->{_apiurl}, content => {api_key => $self->{_apikey}, %args }
@@ -226,7 +310,7 @@ sub _parse_response {
 
 	if ($response->content =~ m|ERRORARRAY|i) {
 		my $json = from_json($response->content);
-		if ($json->{REQUESTSTATUS} == 0) {
+		if (scalar (@{$json->{ERRORARRAY}}) == 0) {
 			return $json->{DATA};
 		} else {
 			# TODO this only returns the first error from the API
@@ -323,6 +407,15 @@ Returns the ID for a domain given the name.
 
 Requires domainid, use 0 to create a domain.
 
+=head2 domainChange
+
+Requires domainid, grabs current data, overwrites passed values then calls
+domainSave for you.
+
+=head2 domainDelete
+
+Requires domainid, deletes the domain
+
 =head2 domainResourceList
 
 Requires domainid or domain passed in as args.  'domain' is the name of the
@@ -338,9 +431,22 @@ Requires domainid and resourceid.
 Returns a reference to a hash.  The hash contains the data for the resource
 record returned by the Linode API with the keys lower cased.
 
+=head2 getResourceIDbyName
+
+Takes a record name and domainid or domain and returns the resourceid
+
 =head2 domainResourceSave
 
 Requires domainid and resourceid.  Use 0 for resourceid to create.
+
+=head2 domainResourceChange
+
+Requires resourceid, grabs current data, overwrites passed values then calls
+domainResourceSave for you.
+
+=head2 domainResourceDelete
+
+Requires resourceid, deletes the resource record.
 
 =head1 AUTHOR
 
@@ -348,9 +454,11 @@ Michael Greb, C<< <mgreb@linode.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-webservice-linode at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WebService-Linode>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests to C<bug-webservice-linode
+at rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WebService-Linode>.  I will
+be notified, and then you'll automatically be notified of progress on your
+bug as I make changes.
 
 =head1 SUPPORT
 
