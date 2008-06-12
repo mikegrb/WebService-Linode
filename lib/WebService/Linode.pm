@@ -407,7 +407,7 @@ Returns the ID for a domain given the name.
 
 Requires domainid, use 0 to create a domain.
 
-=head2 domainChange
+=head2 domainUpdate
 
 Requires domainid, grabs current data, overwrites passed values then calls
 domainSave for you.
@@ -439,7 +439,7 @@ Takes a record name and domainid or domain and returns the resourceid
 
 Requires domainid and resourceid.  Use 0 for resourceid to create.
 
-=head2 domainResourceChange
+=head2 domainResourceUpdate
 
 Requires resourceid, grabs current data, overwrites passed values then calls
 domainResourceSave for you.
