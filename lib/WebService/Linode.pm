@@ -35,7 +35,7 @@ sub new {
 	$self->{_debug}		= $args{debug}		|| 0;
 	$self->{_fatal}		= $args{fatal}		|| 0;
 	$self->{_nowarn}	= $args{nowarn}		|| 0;
-	$self->{_apiurl}	= $args{apiurl}	|| 'https://www.linode.com/api/';
+	$self->{_apiurl}	= $args{apiurl}	|| 'https://api.linode.com/api/';
 
 	$self->{_ua} = LWP::UserAgent->new;
 	$self->{_ua}->agent("WebService::Linode/$WebService::Linode::VERSION ");
@@ -453,6 +453,8 @@ Requires resourceid, deletes the resource record.
 Michael Greb, C<< <mgreb@linode.com> >>
 
 =head1 BUGS
+
+This module does not yet support the Linode API batch method, patches welcome.
 
 Please report any bugs or feature requests to C<bug-webservice-linode
 at rt.cpan.org>, or through the web interface at
