@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use WebService::Linode;
+use WebService::Linode::DNS;
 use LWP::Simple;
 
 # yourname.com is a master zone with a resource record of type A named home
@@ -16,7 +16,7 @@ my $record = 'home';
 # get public ip
 chomp(my $pubip = get('http://ip.thegrebs.com/'));
 
-my $api = new WebService::Linode( apikey => $apikey );
+my $api = new WebService::Linode::DNS( apikey => $apikey );
 
 my $resourceid =
 	$api->getResourceIDbyName(domain => $domain, name => $record);

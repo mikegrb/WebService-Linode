@@ -29,12 +29,12 @@ $ua->mock('post',
 	}
 );
 
-use_ok( 'WebService::Linode' );
+use_ok( 'WebService::Linode::DNS' );
 
 my $expected;
-my $api = WebService::Linode->new(apikey => 123, nowarn=>1);
+my $api = WebService::Linode::DNS->new(apikey => 123, nowarn=>1);
 
-isa_ok($api, 'WebService::Linode');
+isa_ok($api, 'WebService::Linode::DNS');
 
 $response->set_always( 'content', scalar(<DATA>));
 $expected = eval scalar(<DATA>);
