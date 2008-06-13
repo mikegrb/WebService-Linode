@@ -3,8 +3,9 @@ MANIFEST
 Makefile.PL
 README
 lib/WebService/Linode.pm
+lib/WebService/Linode/DNS.pm
 t/00-load.t
 t/pod-coverage.t
 t/pod.t
 examples/list_records.pl
-examples/dynddns.pl
+examples/dyndns.pl

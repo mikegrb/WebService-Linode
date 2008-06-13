@@ -3,9 +3,9 @@
 use strict;
 use warnings;
 
-use WebService::Linode;
+use WebService::Linode::DNS;
 
-my $api = new WebService::Linode(
+my $api = new WebService::Linode::DNS (
 	apikey => '',
 	apiurl => 'http://beta.linode.com/api/',
 	debug => 5,
