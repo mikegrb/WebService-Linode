@@ -275,8 +275,8 @@ All methods take the same parameters as the Linode API itself does.  Field
 names should be lower cased.  All caps fields from the Linode API will be
 lower cased before returning the data.
 
-TODO: actual docs
-verbose 0-10, apikey, nocache, fatal, nowarn, apiurl
+Accepts a hash as an argument.  apikey is the only required parameter
+specifying your Linode API key.
 
 Errors mirror the perl DBI error handling method.
 $WebService::Linode::DNS::err and ::errstr will be populated with the last error
@@ -375,6 +375,10 @@ You can find documentation for this module with the perldoc command.
 You can also look for information at:
 
 =over 4
+
+=item * Module Repo
+
+L<http://git.thegrebs.com/?p=WebService-Linode;a=summary>
 
 =item * RT: CPAN's request tracker
 
