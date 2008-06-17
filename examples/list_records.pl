@@ -7,7 +7,6 @@ use WebService::Linode::DNS;
 
 my $api = new WebService::Linode::DNS (
 	apikey => '',
-	apiurl => 'http://beta.linode.com/api/',
 	debug => 5,
 	fatal => 1,
 	nocache => 0

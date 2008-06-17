@@ -136,8 +136,8 @@ All methods take the same parameters as the Linode API itself does.  Field
 names should be lower cased.  All caps fields from the Linode API will be
 lower cased before returning the data.
 
-TODO: actual docs
-verbose 0-10, apikey, nocache, fatal, nowarn, apiurl
+Accepts a hash as an argument.  apikey is the only required parameter
+specifying your Linode API key.
 
 Errors mirror the perl DBI error handling method.
 $WebService::Linode::err and ::errstr will be populated with the last error
@@ -151,11 +151,12 @@ nocache disables some cacheing of domainname -> domainid
 
 =head2 send_request
 
-Sends a request to the API, takes a hash of name=>value pairs.
+Sends a request to the API, takes a hash of name=>value pairs.  Returns an
+HTTP::Response object.
 
 =head2 parse_response
 
-Takes a LWP::Response (TODO: <- check this ) object and parses the API
+Takes an HTTP::Response object and parses the API
 response returning just the DATA section.
 
 =head2 do_request
@@ -187,6 +188,10 @@ You can find documentation for this module with the perldoc command.
 You can also look for information at:
 
 =over 4
+
+=item * Module Repo
+
+L<http://git.thegrebs.com/?p=WebService-Linode;a=summary>
 
 =item * RT: CPAN's request tracker
 
