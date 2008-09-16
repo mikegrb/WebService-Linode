@@ -3,9 +3,7 @@ package WebService::Linode::DNS;
 use warnings;
 use strict;
 
-use Webservice::Linode;
-
-use Data::Dumper;
+use WebService::Linode;
 
 =head1 NAME
 
@@ -13,11 +11,11 @@ WebService::Linode::DNS - Perl Interface to the Linode.com API DNS methods.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our @ISA = ("WebService::Linode");
 
 sub getDomainIDbyName {

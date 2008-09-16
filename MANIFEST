@@ -1,11 +1,15 @@
 Changes
 MANIFEST
+MANIFEST.SKIP
 Makefile.PL
 README
 lib/WebService/Linode.pm
 lib/WebService/Linode/DNS.pm
 t/00-load.t
+t/01-domains.t
 t/pod-coverage.t
 t/pod.t
+t/boilerplate.t
+t/signature.t
 examples/list_records.pl
 examples/dyndns.pl
