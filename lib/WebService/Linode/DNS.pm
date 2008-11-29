@@ -261,7 +261,7 @@ Example usage:
 	use WebService::Linode::DNS;
 
 	my $api = new WebService::Linode::DNS(apikey => 'mmmcake');
-	for my $domain (@{$api->listDomains}) {
+	for my $domain (@{$api->domainList}) {
 		print $domain->{domainid}, "\n";
 	}
 

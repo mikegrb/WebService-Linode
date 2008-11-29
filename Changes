@@ -1,5 +1,8 @@
 Revision history for WebService-Linode
 
+0.03
+	- Fix typo in WebService::Linode::DNS docs
+
 0.02	Mon Sep 15 20:45:20 EDT 2008
 	- Cache last seen pub ip in examples/dyndns.pl
 	- Fix typo in WebService::Linode::DNS (closes #39311)
