@@ -1,0 +1,2 @@
+- test that verifies LWP SSL support
+- detect lack of LWP SSL support at run time
