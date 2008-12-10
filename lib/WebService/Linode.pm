@@ -85,6 +85,9 @@ sub parse_response {
 			);
 			return;
 		}
+	} elsif ($response->status_line) {
+		$self->_error(-1, $response->status_line);
+		return;
 	} else {
 		$self->_error(-1, 'No JSON found');
 		return;
