@@ -4,6 +4,14 @@ This module provides access to the Linode.com API from perl.
 
 This is version 0.01 of the module, the initial release.
 
+PREREQUISITES
+
+This module requires SSL support from LWP::UserAgent.  This is available by
+ensuring either Crypt::SSLeay or IO::Socket::SSL are also installed.  The
+Makefile.PL for this distribution defines Crypt::SSLeay as a prerequisite.  If
+you prefer to use IO::Socket::SSL, you may replace Crypt::SSLeay with it in
+Makefile.PL.
+
 INSTALLATION
 
 To install this module, run the following commands:

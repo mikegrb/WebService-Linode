@@ -14,6 +14,7 @@ WriteMakefile(
 		'Test::More'	=> 0,
 		'JSON'			=> 2.00,
 		'LWP::UserAgent'	=> 0,
+		'Crypt::SSLeay'	=> 0,
 	},
 	dist				=> { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
 	clean				=> { FILES => 'WebService-Linode-*' },
