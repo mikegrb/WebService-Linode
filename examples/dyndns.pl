@@ -15,8 +15,10 @@ my $record = 'home';
 my $ipfile = '/home/username/.lastip';	# file to store last IP between runs
 
 # get public ip
-chomp (my $pubip = get('http://ip.thegrebs.com/'));
-chomp (my $oldip = `cat  $ipfile`);
+my $pubip = get('http://ip.thegrebs.com/') or exit 1;
+my $oldip = `cat  $ipfile`;
+
+for ($pubip, $oldip) { chomp if $_ }
 
 # exit if no change
 exit 0 if $oldip eq $pubip;
