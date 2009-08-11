@@ -3,23 +3,21 @@
 use strict;
 use warnings;
 
-use WebService::Linode::DNS;
+use WebService::Linode;
 
-my $api = new WebService::Linode::DNS (
-	apikey => '',
-	debug => 5,
-	fatal => 1,
-	nocache => 0
+my $api = new WebService::Linode(
+    apikey => 'your api key',
+    fatal  => 1,
 );
 
-for my $domain (@{$api->domainList}) {
-	print "$domain->{domain} $domain->{type}\n";
-	print "Records:\n";
-	
-	my $rrs = $api->domainResourceList( domainid => $domain->{domainid} );
-	for my $rr ( @$rrs ) {
-		printf("\t%-10s %5s %-20s\n",
-			 $rr->{name}, $rr->{type}, $rr->{target}
-		);
-	}	
+for my $domain ( @{ $api->domain_list } ) {
+    print "$domain->{domain} $domain->{type}\n";
+    next if $domain->{type} eq 'slave';
+
+    print "Records:\n";
+    my $rrs = $api->domain_resource_list( domainid => $domain->{domainid} );
+    for my $rr (@$rrs) {
+        printf( "\t%-10s %5s %-20s\n",
+            $rr->{name}, $rr->{type}, $rr->{target} );
+    }
 }

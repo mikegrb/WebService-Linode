@@ -29,22 +29,22 @@ $ua->mock('post',
 	}
 );
 
-use_ok( 'WebService::Linode::DNS' );
+use_ok( 'WebService::Linode' );
 
 my $expected;
-my $api = WebService::Linode::DNS->new(apikey => 123, nowarn=>1);
+my $api = WebService::Linode->new(apikey => 123, nowarn=>1);
 
-isa_ok($api, 'WebService::Linode::DNS');
+isa_ok($api, 'WebService::Linode');
 
 $response->set_always( 'content', scalar(<DATA>));
 $expected = eval scalar(<DATA>);
-is_deeply($api->domainList(), $expected, 'domainList');
+is_deeply($api->domain_list(), $expected, 'domain_list');
 
 is ($api->getDomainIDbyName('apitest.com'), 5118, 'getDomainIDbyName');
 
 $response->set_always( 'content', scalar(<DATA>));
 $expected = eval scalar(<DATA>);
-is_deeply($api->domainGet(domainid=>5117), $expected, 'domainGet(domainid=>5117)');
+is_deeply($api->domain_list(domainid=>5117), $expected, 'domain_list(domainid=>5117)');
 
 #TODO more tests!
 #TODO check the requests, not just that returned data propperly handled

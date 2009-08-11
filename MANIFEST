@@ -3,8 +3,10 @@ MANIFEST
 MANIFEST.SKIP
 Makefile.PL
 README
+TODO
 lib/WebService/Linode.pm
 lib/WebService/Linode/DNS.pm
+lib/WebService/Linode/Base.pm
 t/00-load.t
 t/01-domains.t
 t/pod-coverage.t

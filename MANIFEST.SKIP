@@ -3,3 +3,4 @@
 ^blib/
 ^MakeMaker-\d
 ^\.git/.*
+^gen-pod\.pl$

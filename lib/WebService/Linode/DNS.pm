@@ -1,9 +1,10 @@
 package WebService::Linode::DNS;
 
-use warnings;
 use strict;
+use warnings;
 
-use WebService::Linode;
+use Carp;
+use WebService::Linode::Base;
 
 =head1 NAME
 
@@ -11,12 +12,12 @@ WebService::Linode::DNS - Perl Interface to the Linode.com API DNS methods.
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
-our @ISA = ("WebService::Linode");
+our $VERSION = '0.04';
+our @ISA = ("WebService::Linode::Base");
 
 sub getDomainIDbyName {
 	my $self = shift;
@@ -42,7 +43,7 @@ sub domainList {
 	my $self = shift;
 	$self->_debug(10, 'domainList called');
 
-	my $data = $self->do_request( action => 'domainList' );
+	my $data = $self->do_request( api_action => 'domain.list' );
 	if (defined($data)) {
 		my @domains;
 		for my $domain (@$data) {
@@ -78,25 +79,26 @@ sub domainGet {
 	}
 
 	my $data = $self->do_request(
-		action => 'domainGet', domainid => $domainid
+		api_action => 'domain.list', domainid => $domainid
 	);
 
 	return $self->_lc_keys($data);
 }
 
-sub domainSave {
+sub domainCreate {
 	my ($self, %args) = @_;
-	$self->_debug(10, 'domainSave called');
+	$self->_debug(10, 'domainCreate called');
 
-	if (!exists ($args{domainid})) {
-		$self->_error(-1, "Must pass domainid to domainSave");
-		return;
-	}
-
-	my $data = $self->do_request( action => 'domainSave', %args);
+	my $data = $self->do_request( api_action => 'domain.create', %args);
 
 	return unless exists ($data->{DomainID});
 	return $data->{DomainID};
+}
+
+sub domainSave {
+    my ($self, %args) = @_;
+    carp "Deprecated use of domainSave, use domainCreate";
+    return $self->domainCreate(%args);
 }
 
 sub domainUpdate {
@@ -113,7 +115,8 @@ sub domainUpdate {
 	# overwrite changed items
 	$data{$_} = $args{$_} for keys (%args);
 
-	return $self->domainSave(%data);
+
+    return $self->do_request( api_action => 'domain.update', %args);
 }
 
 sub domainDelete {
@@ -125,7 +128,7 @@ sub domainDelete {
 		return;
 	}
 
-	my $data = $self->do_request( action => 'domainDelete', %args);
+	my $data = $self->do_request( api_action => 'domain.delete', %args);
 
 	return unless exists ($data->{DomainID});
 	return $data->{DomainID};
@@ -151,7 +154,7 @@ sub domainResourceList {
 	}
 
 	my $data = $self->do_request(
-		action => 'domainResourceList', domainid => $domainid
+		api_action => 'domain.resource.list', domainid => $domainid
 	);
 
 	if (defined($data)) {
@@ -175,7 +178,7 @@ sub domainResourceGet {
 	}
 
 	my $data = $self->do_request(
-		action => 'domainResourceGet',
+		api_action => 'domain.resource.list',
 		domainid => $domainid,
 		resourceid => $args{resourceid},
 	);
@@ -193,7 +196,7 @@ sub getResourceIDbyName {
 	if (!exists ($args{domainid}) && exists($args{domain}) ) {
 		$domainid = $self->getDomainIDbyName($args{domain});
 	}
-	
+
 	if (!(defined($domainid) && exists($args{name}))) {
 		$self->_error(-1,
 			'Must pass domain or domainid and (resource) name to getResourceIDbyName');
@@ -205,19 +208,23 @@ sub getResourceIDbyName {
 	}
 }
 
-sub domainResourceSave {
+sub domainResourceCreate {
 	my ($self, %args) = @_;
-	$self->_debug(10, 'domainResourceSave called');
+	$self->_debug(10, 'domainResourceCreate called');
 
-	if (!exists ($args{resourceid})) {
-		$self->_error(-1, "Must pass resourceid to domainResourceSave");
-		return;
-	}
-
-	my $data = $self->do_request( action => 'domainResourceSave', %args);
+	my $data = $self->do_request( api_action => 'domain.resource.create', %args);
 
 	return unless exists ($data->{ResourceID});
 	return $data->{ResourceID};
+}
+
+sub domainResourceSave {
+	my ($self, %args) = @_;
+	$self->_debug(10, 'domainResourceCreate called');
+
+    carp "Depricated use of domainResourceSave, use domainResourceCreate";
+
+    return $self->domainResourceCreate(%args);
 }
 
 sub domainResourceUpdate {
@@ -229,12 +236,7 @@ sub domainResourceUpdate {
 		return;
 	}
 
-	my %data = %{ $self->domainResourceGet(resourceid => $args{resourceid}) };
-
-	# overwrite changed items
-	$data{$_} = $args{$_} for keys (%args);
-
-	return $self->domainResourceSave(%data);
+    return $self->do_request( api_action => 'domain.resource.update', %args);
 }
 
 sub domainResourceDelete {
@@ -246,13 +248,15 @@ sub domainResourceDelete {
 		return;
 	}
 
-	my $data = $self->do_request( action => 'domainResourceDelete', %args);
+	my $data = $self->do_request( api_action => 'domain.resource.delete', %args);
 
 	return unless exists ($data->{ResourceID});
 	return $data->{ResourceID};
 }
 
 =head1 SYNOPSIS
+
+THIS MODULE IS DEPRECATED, DON'T USE IT, USE WebService::Linode
 
 This module provides a simple OOish interface to the Linode.com API.
 
@@ -293,6 +297,8 @@ containing a reference to a hash with the data for that domain.  Keys in the
 hash use the same names returned by the Linode API though the names have been
 converted to lower-case.
 
+=head2 domainSave
+
 =head2 domainGet
 
 Requires domainid or domain passed in as args.  'domain' is the name of the
@@ -304,7 +310,7 @@ returned by the Linode API with the keys lower cased.
 
 Returns the ID for a domain given the name.
 
-=head2 domainSave
+=head2 domainCreate
 
 Requires domainid, use 0 to create a domain.
 
@@ -316,6 +322,8 @@ domainSave for you.
 =head2 domainDelete
 
 Requires domainid, deletes the domain
+
+=head2 domainResourceCreate
 
 =head2 domainResourceList
 

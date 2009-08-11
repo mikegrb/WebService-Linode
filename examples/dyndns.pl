@@ -3,16 +3,16 @@
 use strict;
 use warnings;
 
-use WebService::Linode::DNS;
+use WebService::Linode;
 use LWP::Simple;
 
 # yourname.com is a master zone with a resource record of type A named home
 # that should point to home IP.
 
-my $apikey = '';
+my $apikey = 'your api key';
 my $domain = 'yourname.com';
 my $record = 'home';
-my $ipfile = '/home/username/.lastip';	# file to store last IP between runs
+my $ipfile = '/home/username/.lastip';    # file to store last IP between runs
 
 # get public ip
 my $pubip = get('http://ip.thegrebs.com/') or exit 1;
@@ -25,12 +25,15 @@ exit 0 if $oldip eq $pubip;
 
 # still running so update A record $record in $domain to point to current
 # public ip
-my $api = new WebService::Linode::DNS( apikey => $apikey );
+my $api = new WebService::Linode( apikey => $apikey );
 
-my $resourceid =
-	$api->getResourceIDbyName(domain => $domain, name => $record);
-die "Couldn't find RR id" unless $resourceid;
+my $domainid = $api->getDomainIDbyName($domain);
+die "Couldn't find Domain ID for $domain\n" unless $domainid;
 
-$api->domainResourceUpdate(resourceid => $resourceid, target => $pubip);
+my $resourceid = $api->getDomainResourceIDbyName(domainid => $domainid, name => $record);
+die "Couldn't find RR id for $record\n" unless $resourceid;
+
+my $result = $api->domain_resource_update(domainid=> $domainid, resourceid => $resourceid, target => $pubip);
+die "Error updating RR :<" unless $result->{resourceid} == $resourceid;
 
 system "echo '$pubip' > $ipfile";
