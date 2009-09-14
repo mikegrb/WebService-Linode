@@ -9,7 +9,7 @@ use Carp;
 use List::Util qw(first);
 use WebService::Linode::Base;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 our @ISA     = ("WebService::Linode::Base");
 our $AUTOLOAD;
 
@@ -149,7 +149,7 @@ WebService::Linode - Perl Interface to the Linode.com API.
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =head1 SYNOPSIS
 
