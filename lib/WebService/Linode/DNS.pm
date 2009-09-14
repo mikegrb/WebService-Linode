@@ -169,11 +169,20 @@ sub domainResourceList {
 sub domainResourceGet {
 	my ($self, %args) = @_;
 	$self->_debug(10, 'domainResourceGet called');
-	my $domainid;
 
-	unless (exists ($args{resourceid})) {
-		$self->_error(-1, 
-			'Must pass domainid or domain and resourceid domainResourceGet');
+	my $domainid;
+	if ($args{domain}) {
+		$domainid = $self->getDomainIDbyName($args{domain});
+		$self->_error(-1, "$args{domain} not found") unless $domainid;
+		return unless $domainid;
+	}
+	else {
+		$domainid = $args{domainid}
+	}
+
+	unless ( exists( $args{resourceid} ) && exists( $args{domainid} ) ) {
+		$self->_error(-1,
+			'Must pass domain id or domain and resourceid to domainResourceGet');
 		return;
 	}
 

@@ -8,6 +8,8 @@ Revision history for WebService-Linode
       username and password, returns $data->{api_key}.  Note: you are
       currently still responsible for calling $api->apikey($key) after
       retrieving the key if you wish to use it for subsequent requests.
+    - fix WebService::Linode::DNS domainResourceGet when called with domain
+      name rather than id. (closes #49452 reported by jtmink1)
 
 0.04  Mon Aug 10 21:45:49 EDT 2009
     - Update to Linode.com API version 2.0 -- This is a pretty big change,
