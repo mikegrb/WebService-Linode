@@ -27,9 +27,7 @@ sub new {
 	my ($package, %args) = @_;
 	my $self;
 
-	croak "Must specify API key." unless exists ($args{apikey});
-
-	$self->{_apikey}	= $args{apikey};
+	$self->{_apikey}	= $args{apikey} if $args{apikey};
 
 	$self->{_nocache}	= $args{nocache}	|| 0;
 	$self->{_debug}		= $args{debug}		|| 0;
@@ -38,10 +36,16 @@ sub new {
 	$self->{_apiurl}	= $args{apiurl}	|| 'https://api.linode.com/api/';
 
 	$self->{_ua} = LWP::UserAgent->new;
-	$self->{_ua}->agent("WebService::Linode/$WebService::Linode::VERSION ");
+	$self->{_ua}->agent("WebService::Linode::Base/$WebService::Linode::Base::VERSION ");
 
 	bless $self, $package;
 	return $self;
+}
+
+sub apikey {
+    my $self = shift;
+    $self->{_apikey} = shift if @_ == 1;
+    return $self->{_apikey};
 }
 
 sub do_request {
@@ -59,9 +63,9 @@ sub send_request {
 		$self->_debug(10, "About to send request: " . join(' ' , %args));
 	}
 
-	return $self->{_ua}->post(
-		$self->{_apiurl}, content => {api_key => $self->{_apikey}, %args }
-	);
+    $args{api_key} = $self->{_apikey} if $self->{_apikey};
+
+	return $self->{_ua}->post( $self->{_apiurl}, content => { %args } );
 }
 
 sub parse_response {
@@ -146,7 +150,7 @@ Errors mirror the perl DBI error handling method.
 $WebService::Linode::err and ::errstr will be populated with the last error
 number and string that occurred.  All errors generated within the module
 are currently error code -1.  By default, will warn on errors as well, pass
-a true value for fatal to die instead or nowarn to prevent the warnings.
+a true value for fatal to die instead, or nowarn to prevent the warnings.
 
 verbose is 0-10 with 10 being the most and 0 being none
 
@@ -164,6 +168,13 @@ response returning just the DATA section.
 
 Executes the send_request method, parses the response with the parse_response
 method and returns the data.
+
+=head2 apikey
+
+Takes one optional argument, an apikey that if passed replaces the key
+currently in use.  Returns the current (or new) apikey.
+
+Returns the apikey
 
 =head1 AUTHOR
 

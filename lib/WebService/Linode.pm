@@ -1,6 +1,6 @@
 package WebService::Linode;
 
-require v5.6.0;
+require 5.006000;
 
 use warnings;
 use strict;
@@ -66,7 +66,9 @@ my %validation = (
     linode_job => {
         list => [ [ 'linodeid' ], [ 'jobid', 'pendingonly' ] ],
     },
-
+    user => {
+        getapikey => [ [ 'username', 'password' ], [] ],
+    },
 );
 
 sub AUTOLOAD {
@@ -847,6 +849,18 @@ Optional Parameters:
 =item * jobid
 
 =item * pendingonly
+
+=back
+
+=head3 user_getapikey
+
+Required Parameters:
+
+=over 4
+
+=item * username
+
+=item * password
 
 =back
 

@@ -1,5 +1,14 @@
 Revision history for WebService-Linode
 
+0.05  Mon Sep 14 2009
+    - Apikey is no longer a required argument to the base constructor
+    - New method in the base class, apikey for specifying or changing apikey
+      at times other than construction
+    - New method in WebService::Linode, user_getapikey, given a valid Linode
+      username and password, returns $data->{api_key}.  Note: you are
+      currently still responsible for calling $api->apikey($key) after
+      retrieving the key if you wish to use it for subsequent requests.
+
 0.04  Mon Aug 10 21:45:49 EDT 2009
     - Update to Linode.com API version 2.0 -- This is a pretty big change,
       includes support for Linodes now as well as DNS
