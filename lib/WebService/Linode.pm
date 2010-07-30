@@ -19,6 +19,7 @@ my %validation = (
         kernels       => [ [], [ 'kernelid', 'isxen' ] ],
         linodeplans   => [ [], [ 'plainid'           ] ],
         distributions => [ [], [ 'distributionid'    ] ],
+        stackscripts  => [ [], [ 'distributionid', 'distributionvendor', 'keywords'] ],
     },
     domain => {
         create => [ [ 'domain', 'type' ], [ qw( description soa_email refresh_sec retry_sec expire_sec ttl_sec status master_ips ) ]],
@@ -40,6 +41,7 @@ my %validation = (
         shutdown => [ ['linodeid'], [] ],
         boot     => [ ['linodeid'], ['configid'] ],
         reboot   => [ ['linodeid'], ['configid'] ],
+        resize   => [ ['linodeid', 'planid'], [] ],
     },
 
     linode_config => {
@@ -58,13 +60,24 @@ my %validation = (
         createfromdistribution => [ [ qw( linodeid distributionid label size rootpass ) ], [ 'rootsshkey' ] ],
         duplicate => [ [ 'linodeid', 'diskid' ], [] ],
         resize    => [ [ 'linodeid', 'diskid', 'size' ], [] ],
+        createfromstackscript  => [ [ qw( linodeid stackscriptid stackscriptudfresponses distributionid label size rootpass) ], [] ],
 
     },
     linode_ip => {
-        list  => [ [ 'linodeid' ], [ 'ipaddressid' ] ],
+        list       => [ [ 'linodeid' ], [ 'ipaddressid' ] ],
+        addprivate => [ [ 'linodeid' ], [] ],
     },
     linode_job => {
         list => [ [ 'linodeid' ], [ 'jobid', 'pendingonly' ] ],
+    },
+    stackscript => {
+	    create => [ ['label', 'distributionidlist', 'script' ], ['description', 'ispublic', 'rev_note'] ],
+        delete => [ ['stackscriptid'], [] ],
+        list   => [ ['stackscriptid'], [] ],
+        update => [ ['stackscriptid'], [ qw( label description distributionidlist ispublic rev_note script) ] ],
+    },
+    test => {
+	    echo   => [ [], [] ],
     },
     user => {
         getapikey => [ [ 'username', 'password' ], [] ],
