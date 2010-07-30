@@ -5,7 +5,7 @@ use warnings;
 
 use WebService::Linode;
 
-my $api = new WebService::Linode(
+my $api = WebService::Linode->new(
     apikey => 'your api key',
     fatal  => 1,
 );

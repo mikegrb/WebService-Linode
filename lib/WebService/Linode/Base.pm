@@ -132,7 +132,7 @@ Example usage:
 
 	use WebService::Linode::Base;
 
-	my $api = new WebService::Linode::Base(apikey => 'mmmcake');
+	my $api = WebService::Linode::Base->new(apikey => 'mmmcake');
 	my $data = $api->do_request( api_action => 'domains.list' );
 
 =head1 METHODS

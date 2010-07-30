@@ -25,7 +25,7 @@ exit 0 if $oldip eq $pubip;
 
 # still running so update A record $record in $domain to point to current
 # public ip
-my $api = new WebService::Linode( apikey => $apikey );
+my $api = WebService::Linode->new( apikey => $apikey );
 
 my $domainid = $api->getDomainIDbyName($domain);
 die "Couldn't find Domain ID for $domain\n" unless $domainid;

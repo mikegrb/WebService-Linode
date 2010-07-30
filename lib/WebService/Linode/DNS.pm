@@ -273,7 +273,7 @@ Example usage:
 
 	use WebService::Linode::DNS;
 
-	my $api = new WebService::Linode::DNS(apikey => 'mmmcake');
+	my $api = WebService::Linode::DNS->new(apikey => 'mmmcake');
 	for my $domain (@{$api->domainList}) {
 		print $domain->{domainid}, "\n";
 	}

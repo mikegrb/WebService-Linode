@@ -166,7 +166,7 @@ Version 0.05
 
 =head1 SYNOPSIS
 
-    my $api = new WebService::Linode( apikey => 'your api key here');
+    my $api = WebService::Linode->new( apikey => 'your api key here');
     print Dumper($api->linode_list);
     $api->linode_reboot(linodeid=>242);
 
