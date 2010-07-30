@@ -177,7 +177,33 @@ same.  For additional information see L<http://www.linode.com/api/autodoc.cfm>
 
 =head1 Methods from the Linode API
 
+=head3 avail_stackscripts
+
+Required Parameters:
+
+=over 4
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * distributionid
+
+=item * distributionvendor
+
+=item * keywords
+
+=back
+
 =head3 avail_kernels
+
+Required Parameters:
+
+=over 4
+
+=back
 
 Optional Parameters:
 
@@ -191,6 +217,12 @@ Optional Parameters:
 
 =head3 avail_linodeplans
 
+Required Parameters:
+
+=over 4
+
+=back
+
 Optional Parameters:
 
 =over 4
@@ -201,7 +233,25 @@ Optional Parameters:
 
 =head3 avail_datacenters
 
+Required Parameters:
+
+=over 4
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=back
+
 =head3 avail_distributions
+
+Required Parameters:
+
+=over 4
+
+=back
 
 Optional Parameters:
 
@@ -469,6 +519,24 @@ Optional Parameters:
 
 =back
 
+=head3 linode_resize
+
+Required Parameters:
+
+=over 4
+
+=item * linodeid
+
+=item * planid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=back
+
 =head3 linode_shutdown
 
 Required Parameters:
@@ -705,7 +773,7 @@ Optional Parameters:
 
 =back
 
-=head3 linode_disk_resize
+=head3 linode_disk_createfromstackscript
 
 Required Parameters:
 
@@ -713,9 +781,17 @@ Required Parameters:
 
 =item * linodeid
 
-=item * diskid
+=item * stackscriptid
+
+=item * stackscriptudfresponses
+
+=item * distributionid
+
+=item * label
 
 =item * size
+
+=item * rootpass
 
 =back
 
@@ -748,6 +824,26 @@ Optional Parameters:
 =over 4
 
 =item * rootsshkey
+
+=back
+
+=head3 linode_disk_resize
+
+Required Parameters:
+
+=over 4
+
+=item * linodeid
+
+=item * diskid
+
+=item * size
+
+=back
+
+Optional Parameters:
+
+=over 4
 
 =back
 
@@ -827,6 +923,22 @@ Optional Parameters:
 
 =back
 
+=head3 linode_ip_addprivate
+
+Required Parameters:
+
+=over 4
+
+=item * linodeid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=back
+
 =head3 linode_ip_list
 
 Required Parameters:
@@ -865,15 +977,89 @@ Optional Parameters:
 
 =back
 
-=head3 user_getapikey
+=head3 stackscript_create
 
 Required Parameters:
 
 =over 4
 
-=item * username
+=item * label
 
-=item * password
+=item * distributionidlist
+
+=item * script
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * description
+
+=item * ispublic
+
+=item * rev_note
+
+=back
+
+=head3 stackscript_delete
+
+Required Parameters:
+
+=over 4
+
+=item * stackscriptid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=back
+
+=head3 stackscript_update
+
+Required Parameters:
+
+=over 4
+
+=item * stackscriptid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * label
+
+=item * description
+
+=item * distributionidlist
+
+=item * ispublic
+
+=item * rev_note
+
+=item * script
+
+=back
+
+=head3 stackscript_list
+
+Required Parameters:
+
+=over 4
+
+=item * stackscriptid
+
+=back
+
+Optional Parameters:
+
+=over 4
 
 =back
 
@@ -889,7 +1075,9 @@ Takes a record name and domainid or domain and returns the resourceid.
 
 =head1 AUTHORS
 
-Michael Greb, C<< <mgreb@linode.com> >>, and Stan "The Intern Man" Schwertly
+=item * Michael Greb, C<< <mgreb@linode.com> >>
+
+=item * Stan "The Man" Schwertly C<< <stan@linode.com> >>
 
 =head1 BUGS
 
