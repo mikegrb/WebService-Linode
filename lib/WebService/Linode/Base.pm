@@ -79,7 +79,7 @@ sub parse_response {
 		} else {
 			# TODO this only returns the first error from the API
 	
-			my $msg = "API Error " . 
+			my $msg = "API Error " .
 				$json->{ERRORARRAY}->[0]->{ERRORCODE} .  ": " .
 				$json->{ERRORARRAY}->[0]->{ERRORMESSAGE};
 
