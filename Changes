@@ -1,9 +1,10 @@
 Revision history for WebService-Linode
 
-0.06 
-    - Correct reference to module name in docs (closes rt #59535 reported 
+0.06
+    - Correct reference to module name in docs (closes rt #59535 reported
       by Paul Hansen)
     - Use direct object notation rather than indirect notation
+    - new upstream API calls added
 
 0.05  Mon Sep 14 2009
     - Apikey is no longer a required argument to the base constructor

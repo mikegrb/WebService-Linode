@@ -2,7 +2,7 @@ WebService-Linode
 
 This module provides access to the Linode.com API from perl.
 
-This is version 0.05 of the module.
+This is version 0.06 of the module.
 
 PREREQUISITES
 
