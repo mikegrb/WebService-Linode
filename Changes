@@ -1,5 +1,9 @@
 Revision history for WebService-Linode
 
+0.09  Jul 29 2012
+    - Forgot to bump version number in DNS.pm and Base.pm
+        this is why all my other modules use Dist::Zilla
+
 0.08  Jul 29 2012
     - new upstream API calls added
         many additions including nodebalancer support
