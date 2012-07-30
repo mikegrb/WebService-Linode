@@ -4,3 +4,4 @@
 ^MakeMaker-\d
 ^\.git/.*
 ^gen-pod\.pl$
+^gen-validation.pl$

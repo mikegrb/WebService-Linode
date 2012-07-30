@@ -82,7 +82,7 @@ sub domainGet {
 		api_action => 'domain.list', domainid => $domainid
 	);
 
-	return $self->_lc_keys($data);
+	return $self->_lc_keys(@$data);
 }
 
 sub domainCreate {
