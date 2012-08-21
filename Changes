@@ -1,5 +1,8 @@
 Revision history for WebService-Linode
 
+0.10  Aug 20 2012
+    - updated API definition from api.spec after Linode fix, closes #79093
+
 0.09  Jul 29 2012
     - Forgot to bump version number in DNS.pm and Base.pm
         this is why all my other modules use Dist::Zilla

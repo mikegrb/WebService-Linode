@@ -9,13 +9,17 @@ use Carp;
 use List::Util qw(first);
 use WebService::Linode::Base;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 our @ISA     = ("WebService::Linode::Base");
 our $AUTOLOAD;
 
 my %validation = (
-    account => { info => [ [], [] ], },
-    api => { spec => [ [], [] ], },
+    account => {
+        info => [ [], [] ],
+    },
+    api => {
+        spec => [ [], [] ],
+    },
     avail => {
         datacenters => [ [], [] ],
         distributions => [ [], [ 'distributionid' ] ],
@@ -24,21 +28,21 @@ my %validation = (
         stackscripts => [ [], [qw( keywords distributionid distributionvendor )] ],
     },
     domain => {
-        create => [ [ 'domain', 'type' ], [qw( status ttl_sec expire_sec refresh_sec master_ips soa_email retry_sec axfr_ips description )] ],
+        create => [ [ 'domain', 'type' ], [qw( status ttl_sec expire_sec master_ips refresh_sec soa_email retry_sec axfr_ips description )] ],
         delete => [ [ 'domainid' ], [] ],
         list => [ [], [ 'domainid' ] ],
-        update => [ [ 'domainid' ], [qw( status domain ttl_sec expire_sec type refresh_sec master_ips soa_email axfr_ips retry_sec description )] ],
+        update => [ [ 'domainid' ], [qw( status domain ttl_sec expire_sec type master_ips refresh_sec soa_email axfr_ips retry_sec description )] ],
     },
     domain_resource => {
-        create => [ [], [qw( target ttl_sec protocol priority port weight name )] ],
+        create => [ [qw( resourceid domainid type )], [qw( target ttl_sec port weight priority protocol name )] ],
         delete => [ [ 'resourceid', 'domainid' ], [] ],
         list => [ [ 'domainid' ], [ 'resourceid' ] ],
-        update => [ [ 'resourceid', 'domainid' ], [qw( target ttl_sec port weight priority protocol name )] ],
+        update => [ [ 'resourceid' ], [qw( target domainid ttl_sec port weight priority protocol name )] ],
     },
     linode => {
         boot => [ [ 'linodeid' ], [ 'configid' ] ],
         clone => [ [qw( planid paymentterm linodeid datacenterid )], [] ],
-        create => [ [qw( planid label paymentterm datacenterid )], [qw( alert_bwquota_threshold alert_bwin_threshold alert_cpu_threshold lpm_displaygroup alert_bwin_enabled backupwindow alert_cpu_enabled backupweeklyday alert_diskio_enabled alert_bwquota_enabled watchdog alert_bwout_enabled alert_bwout_threshold alert_diskio_threshold )] ],
+        create => [ [qw( planid paymentterm datacenterid )], [] ],
         delete => [ [ 'linodeid' ], [ 'skipchecks' ] ],
         list => [ [], [ 'linodeid' ] ],
         reboot => [ [ 'linodeid' ], [ 'configid' ] ],
@@ -47,26 +51,28 @@ my %validation = (
         update => [ [ 'linodeid' ], [qw( alert_bwquota_threshold alert_bwin_threshold alert_cpu_threshold alert_cpu_enabled alert_diskio_enabled label backupweeklyday alert_bwquota_enabled watchdog lpm_displaygroup alert_bwin_enabled alert_bwout_enabled alert_bwout_threshold alert_diskio_threshold backupwindow )] ],
     },
     linode_config => {
-        create => [ [ 'label', 'kernelid' ], [qw( comments helper_xen devtmpfs_automount rootdevicecustom rootdevicero helper_depmod helper_disableupdatedb disklist runlevel rootdevicenum ramlimit )] ],
+        create => [ [qw( configid linodeid label kernelid )], [qw( comments helper_xen devtmpfs_automount rootdevicecustom rootdevicero helper_depmod helper_disableupdatedb rootdevicenum disklist runlevel ramlimit )] ],
         delete => [ [ 'configid', 'linodeid' ], [] ],
         list => [ [ 'linodeid' ], [ 'configid' ] ],
-        update => [ [ 'configid', 'linodeid' ], [qw( comments helper_xen devtmpfs_automount rootdevicecustom rootdevicero label helper_depmod helper_disableupdatedb rootdevicenum disklist runlevel kernelid ramlimit )] ],
+        update => [ [ 'configid' ], [qw( comments helper_xen devtmpfs_automount rootdevicecustom linodeid rootdevicero label helper_depmod helper_disableupdatedb rootdevicenum disklist runlevel kernelid ramlimit )] ],
     },
     linode_disk => {
-        create => [ [ 'linodeid', 'label' ], [ 'isreadonly' ] ],
-        createfromdistribution => [ [qw( size linodeid rootpass distributionid label )], [ 'rootsshkey' ] ],
+        create => [ [qw( type size linodeid label )], [] ],
+        createfromdistribution => [ [qw( size rootpass linodeid distributionid label )], [ 'rootsshkey' ] ],
         createfromstackscript => [ [qw( size linodeid rootpass distributionid stackscriptudfresponses stackscriptid label )], [] ],
         delete => [ [ 'diskid', 'linodeid' ], [] ],
         duplicate => [ [ 'diskid', 'linodeid' ], [] ],
         list => [ [ 'linodeid' ], [ 'diskid' ] ],
         resize => [ [qw( diskid linodeid size )], [] ],
-        update => [ [ 'diskid', 'linodeid' ], [ 'label', 'isreadonly' ] ],
+        update => [ [ 'diskid' ], [qw( linodeid isreadonly label )] ],
     },
     linode_ip => {
         addprivate => [ [ 'linodeid' ], [] ],
         list => [ [ 'linodeid' ], [ 'ipaddressid' ] ],
     },
-    linode_job => { list => [ [ 'linodeid' ], [ 'pendingonly', 'jobid' ] ], },
+    linode_job => {
+        list => [ [ 'linodeid' ], [ 'pendingonly', 'jobid' ] ],
+    },
     nodebalancer => {
         create => [ [ 'paymentterm', 'datacenterid' ], [ 'label', 'clientconnthrottle' ] ],
         delete => [ [ 'nodebalancerid' ], [] ],
@@ -74,25 +80,29 @@ my %validation = (
         update => [ [ 'nodebalancerid' ], [ 'label', 'clientconnthrottle' ] ],
     },
     nodebalancer_config => {
-        create => [ [], [qw( check_path check_body stickiness port check check_timeout check_attempts check_interval protocol algorithm )] ],
+        create => [ [ 'nodebalancerid' ], [qw( check_path check_body stickiness port check check_timeout check_attempts check_interval protocol algorithm )] ],
         delete => [ [ 'configid' ], [] ],
         list => [ [ 'nodebalancerid' ], [ 'configid' ] ],
-        update => [ [ 'configid' ], [qw( check_path check_body stickiness port check check_timeout check_attempts check_interval protocol algorithm )] ],
+        update => [ [ 'configid' ], [qw( check_path check_body stickiness port check_timeout check check_attempts check_interval protocol algorithm )] ],
     },
     nodebalancer_node => {
-        create => [ [ 'address', 'label' ], [ 'mode', 'weight' ] ],
+        create => [ [qw( configid address label )], [ 'mode', 'weight' ] ],
         delete => [ [ 'nodeid' ], [] ],
         list => [ [ 'configid' ], [ 'nodeid' ] ],
-        update => [ [ 'nodeid' ], [qw( address mode label weight )] ],
+        update => [ [ 'nodeid' ], [qw( address mode weight label )] ],
     },
     stackscript => {
-        create => [ [qw( script label distributionidlist )], [qw( rev_note ispublic description )] ],
+        create => [ [qw( script distributionidlist label )], [qw( rev_note description ispublic )] ],
         delete => [ [ 'stackscriptid' ], [] ],
         list => [ [], [ 'stackscriptid' ] ],
-        update => [ [ 'stackscriptid' ], [qw( script rev_note ispublic label description distributionidlist )] ],
+        update => [ [ 'stackscriptid' ], [qw( script rev_note ispublic label distributionidlist description )] ],
     },
-    test => { echo => [ [], [] ], },
-    user => { getapikey => [ [ 'password', 'username' ], [] ], },
+    test => {
+        echo => [ [], [] ],
+    },
+    user => {
+        getapikey => [ [ 'password', 'username' ], [] ],
+    },
 );
 
 sub AUTOLOAD {
@@ -173,7 +183,7 @@ WebService::Linode - Perl Interface to the Linode.com API.
 
 =head1 VERSION
 
-Version 0.09
+Version 0.10
 
 =head1 SYNOPSIS
 
@@ -294,9 +304,9 @@ Optional Parameters:
 
 =item * expire_sec
 
-=item * refresh_sec
-
 =item * master_ips
+
+=item * refresh_sec
 
 =item * soa_email
 
@@ -348,9 +358,9 @@ Optional Parameters:
 
 =item * type
 
-=item * refresh_sec
-
 =item * master_ips
+
+=item * refresh_sec
 
 =item * soa_email
 
@@ -384,6 +394,12 @@ Required Parameters:
 
 =over 4
 
+=item * resourceid
+
+=item * domainid
+
+=item * type
+
 =back
 
 Optional Parameters:
@@ -394,13 +410,13 @@ Optional Parameters:
 
 =item * ttl_sec
 
-=item * protocol
-
-=item * priority
-
 =item * port
 
 =item * weight
+
+=item * priority
+
+=item * protocol
 
 =item * name
 
@@ -432,8 +448,6 @@ Required Parameters:
 
 =item * resourceid
 
-=item * domainid
-
 =back
 
 Optional Parameters:
@@ -441,6 +455,8 @@ Optional Parameters:
 =over 4
 
 =item * target
+
+=item * domainid
 
 =item * ttl_sec
 
@@ -482,8 +498,6 @@ Required Parameters:
 
 =item * planid
 
-=item * label
-
 =item * paymentterm
 
 =item * datacenterid
@@ -493,34 +507,6 @@ Required Parameters:
 Optional Parameters:
 
 =over 4
-
-=item * alert_bwquota_threshold
-
-=item * alert_bwin_threshold
-
-=item * alert_cpu_threshold
-
-=item * lpm_displaygroup
-
-=item * alert_bwin_enabled
-
-=item * backupwindow
-
-=item * alert_cpu_enabled
-
-=item * backupweeklyday
-
-=item * alert_diskio_enabled
-
-=item * alert_bwquota_enabled
-
-=item * watchdog
-
-=item * alert_bwout_enabled
-
-=item * alert_bwout_threshold
-
-=item * alert_diskio_threshold
 
 =back
 
@@ -702,6 +688,10 @@ Required Parameters:
 
 =over 4
 
+=item * configid
+
+=item * linodeid
+
 =item * label
 
 =item * kernelid
@@ -726,11 +716,11 @@ Optional Parameters:
 
 =item * helper_disableupdatedb
 
+=item * rootdevicenum
+
 =item * disklist
 
 =item * runlevel
-
-=item * rootdevicenum
 
 =item * ramlimit
 
@@ -762,8 +752,6 @@ Required Parameters:
 
 =item * configid
 
-=item * linodeid
-
 =back
 
 Optional Parameters:
@@ -777,6 +765,8 @@ Optional Parameters:
 =item * devtmpfs_automount
 
 =item * rootdevicecustom
+
+=item * linodeid
 
 =item * rootdevicero
 
@@ -822,6 +812,10 @@ Required Parameters:
 
 =over 4
 
+=item * type
+
+=item * size
+
 =item * linodeid
 
 =item * label
@@ -831,8 +825,6 @@ Required Parameters:
 Optional Parameters:
 
 =over 4
-
-=item * isreadonly
 
 =back
 
@@ -864,9 +856,9 @@ Required Parameters:
 
 =item * size
 
-=item * linodeid
-
 =item * rootpass
+
+=item * linodeid
 
 =item * distributionid
 
@@ -926,17 +918,17 @@ Required Parameters:
 
 =item * diskid
 
-=item * linodeid
-
 =back
 
 Optional Parameters:
 
 =over 4
 
-=item * label
+=item * linodeid
 
 =item * isreadonly
+
+=item * label
 
 =back
 
@@ -1048,9 +1040,9 @@ Required Parameters:
 
 =item * script
 
-=item * label
-
 =item * distributionidlist
+
+=item * label
 
 =back
 
@@ -1060,9 +1052,9 @@ Optional Parameters:
 
 =item * rev_note
 
-=item * ispublic
-
 =item * description
+
+=item * ispublic
 
 =back
 
@@ -1104,9 +1096,9 @@ Optional Parameters:
 
 =item * label
 
-=item * description
-
 =item * distributionidlist
+
+=item * description
 
 =back
 
@@ -1123,6 +1115,212 @@ Optional Parameters:
 =over 4
 
 =item * stackscriptid
+
+=back
+
+=head3 nodebalancer_config_create
+
+Required Parameters:
+
+=over 4
+
+=item * nodebalancerid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * check_path
+
+=item * check_body
+
+=item * stickiness
+
+=item * port
+
+=item * check
+
+=item * check_timeout
+
+=item * check_attempts
+
+=item * check_interval
+
+=item * protocol
+
+=item * algorithm
+
+=back
+
+=head3 nodebalancer_config_delete
+
+Required Parameters:
+
+=over 4
+
+=item * configid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=back
+
+=head3 nodebalancer_config_update
+
+Required Parameters:
+
+=over 4
+
+=item * configid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * check_path
+
+=item * check_body
+
+=item * stickiness
+
+=item * port
+
+=item * check_timeout
+
+=item * check
+
+=item * check_attempts
+
+=item * check_interval
+
+=item * protocol
+
+=item * algorithm
+
+=back
+
+=head3 nodebalancer_config_list
+
+Required Parameters:
+
+=over 4
+
+=item * nodebalancerid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * configid
+
+=back
+
+=head3 nodebalancer_node_create
+
+Required Parameters:
+
+=over 4
+
+=item * configid
+
+=item * address
+
+=item * label
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * mode
+
+=item * weight
+
+=back
+
+=head3 nodebalancer_node_delete
+
+Required Parameters:
+
+=over 4
+
+=item * nodeid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=back
+
+=head3 nodebalancer_node_update
+
+Required Parameters:
+
+=over 4
+
+=item * nodeid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * address
+
+=item * mode
+
+=item * weight
+
+=item * label
+
+=back
+
+=head3 nodebalancer_node_list
+
+Required Parameters:
+
+=over 4
+
+=item * configid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * nodeid
+
+=back
+
+=head3 user_getapikey
+
+Required Parameters:
+
+=over 4
+
+=item * password
+
+=item * username
+
+=back
+
+Optional Parameters:
+
+=over 4
 
 =back
 
