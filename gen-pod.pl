@@ -24,7 +24,7 @@ my %validation = (
         update => [ [ 'domainid' ], [qw( status domain ttl_sec expire_sec type master_ips refresh_sec soa_email axfr_ips retry_sec description )] ],
     },
     domain_resource => {
-        create => [ [qw( resourceid domainid type )], [qw( target ttl_sec port weight priority protocol name )] ],
+        create => [ [qw( domainid type )], [qw( target ttl_sec port weight priority protocol name )] ],
         delete => [ [ 'resourceid', 'domainid' ], [] ],
         list => [ [ 'domainid' ], [ 'resourceid' ] ],
         update => [ [ 'resourceid' ], [qw( target domainid ttl_sec port weight priority protocol name )] ],
@@ -41,7 +41,7 @@ my %validation = (
         update => [ [ 'linodeid' ], [qw( alert_bwquota_threshold alert_bwin_threshold alert_cpu_threshold alert_cpu_enabled alert_diskio_enabled label backupweeklyday alert_bwquota_enabled watchdog lpm_displaygroup alert_bwin_enabled alert_bwout_enabled alert_bwout_threshold alert_diskio_threshold backupwindow )] ],
     },
     linode_config => {
-        create => [ [qw( configid linodeid label kernelid )], [qw( comments helper_xen devtmpfs_automount rootdevicecustom rootdevicero helper_depmod helper_disableupdatedb rootdevicenum disklist runlevel ramlimit )] ],
+        create => [ [qw( linodeid label kernelid )], [qw( comments helper_xen devtmpfs_automount rootdevicecustom rootdevicero helper_depmod helper_disableupdatedb rootdevicenum disklist runlevel ramlimit )] ],
         delete => [ [ 'configid', 'linodeid' ], [] ],
         list => [ [ 'linodeid' ], [ 'configid' ] ],
         update => [ [ 'configid' ], [qw( comments helper_xen devtmpfs_automount rootdevicecustom linodeid rootdevicero label helper_depmod helper_disableupdatedb rootdevicenum disklist runlevel kernelid ramlimit )] ],
