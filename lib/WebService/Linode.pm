@@ -245,12 +245,6 @@ same.  For additional information see L<http://www.linode.com/api/>
 
 =head3 avail_stackscripts
 
-Required Parameters:
-
-=over 4
-
-=back
-
 Optional Parameters:
 
 =over 4
@@ -265,12 +259,6 @@ Optional Parameters:
 
 =head3 avail_kernels
 
-Required Parameters:
-
-=over 4
-
-=back
-
 Optional Parameters:
 
 =over 4
@@ -283,12 +271,6 @@ Optional Parameters:
 
 =head3 avail_linodeplans
 
-Required Parameters:
-
-=over 4
-
-=back
-
 Optional Parameters:
 
 =over 4
@@ -299,25 +281,7 @@ Optional Parameters:
 
 =head3 avail_datacenters
 
-Required Parameters:
-
-=over 4
-
-=back
-
-Optional Parameters:
-
-=over 4
-
-=back
-
 =head3 avail_distributions
-
-Required Parameters:
-
-=over 4
-
-=back
 
 Optional Parameters:
 
@@ -373,12 +337,6 @@ Required Parameters:
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=back
-
 =head3 domain_update
 
 Required Parameters:
@@ -418,12 +376,6 @@ Optional Parameters:
 =back
 
 =head3 domain_list
-
-Required Parameters:
-
-=over 4
-
-=back
 
 Optional Parameters:
 
@@ -474,12 +426,6 @@ Required Parameters:
 =item * resourceid
 
 =item * domainid
-
-=back
-
-Optional Parameters:
-
-=over 4
 
 =back
 
@@ -543,12 +489,6 @@ Required Parameters:
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=back
-
 =head3 linode_create
 
 Required Parameters:
@@ -560,12 +500,6 @@ Required Parameters:
 =item * planid
 
 =item * paymentterm
-
-=back
-
-Optional Parameters:
-
-=over 4
 
 =back
 
@@ -594,12 +528,6 @@ Required Parameters:
 =over 4
 
 =item * linodeid
-
-=back
-
-Optional Parameters:
-
-=over 4
 
 =back
 
@@ -633,12 +561,6 @@ Required Parameters:
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=back
-
 =head3 linode_clone
 
 Required Parameters:
@@ -655,12 +577,6 @@ Required Parameters:
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=back
-
 =head3 linode_shutdown
 
 Required Parameters:
@@ -668,12 +584,6 @@ Required Parameters:
 =over 4
 
 =item * linodeid
-
-=back
-
-Optional Parameters:
-
-=over 4
 
 =back
 
@@ -751,12 +661,6 @@ Optional Parameters:
 
 =head3 linode_list
 
-Required Parameters:
-
-=over 4
-
-=back
-
 Optional Parameters:
 
 =over 4
@@ -816,12 +720,6 @@ Required Parameters:
 =item * linodeid
 
 =item * configid
-
-=back
-
-Optional Parameters:
-
-=over 4
 
 =back
 
@@ -903,12 +801,6 @@ Required Parameters:
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=back
-
 =head3 linode_disk_resize
 
 Required Parameters:
@@ -920,12 +812,6 @@ Required Parameters:
 =item * linodeid
 
 =item * size
-
-=back
-
-Optional Parameters:
-
-=over 4
 
 =back
 
@@ -967,12 +853,6 @@ Required Parameters:
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=back
-
 =head3 linode_disk_delete
 
 Required Parameters:
@@ -982,12 +862,6 @@ Required Parameters:
 =item * linodeid
 
 =item * diskid
-
-=back
-
-Optional Parameters:
-
-=over 4
 
 =back
 
@@ -1053,12 +927,6 @@ Required Parameters:
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=back
-
 =head3 linode_ip_addprivate
 
 Required Parameters:
@@ -1066,12 +934,6 @@ Required Parameters:
 =over 4
 
 =item * linodeid
-
-=back
-
-Optional Parameters:
-
-=over 4
 
 =back
 
@@ -1149,12 +1011,6 @@ Required Parameters:
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=back
-
 =head3 stackscript_update
 
 Required Parameters:
@@ -1184,12 +1040,6 @@ Optional Parameters:
 =back
 
 =head3 stackscript_list
-
-Required Parameters:
-
-=over 4
-
-=back
 
 Optional Parameters:
 
@@ -1242,12 +1092,6 @@ Required Parameters:
 =over 4
 
 =item * configid
-
-=back
-
-Optional Parameters:
-
-=over 4
 
 =back
 
@@ -1339,12 +1183,6 @@ Required Parameters:
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=back
-
 =head3 nodebalancer_node_update
 
 Required Parameters:
@@ -1396,12 +1234,6 @@ Required Parameters:
 =item * username
 
 =item * password
-
-=back
-
-Optional Parameters:
-
-=over 4
 
 =back
 

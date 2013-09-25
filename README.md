@@ -11,13 +11,11 @@ WebService::Linode - Perl Interface to the Linode.com API.
 This module implements the Linode.com api methods.  Linode methods have had
 dots replaced with underscores to generate the perl method name.  All keys
 and parameters have been lower cased but returned data remains otherwise the
-same.  For additional information see [http://www.linode.com/api/autodoc.cfm](http://www.linode.com/api/autodoc.cfm)
+same.  For additional information see [http://www.linode.com/api/](http://www.linode.com/api/)
 
 # Methods from the Linode API
 
 ### avail\_stackscripts
-
-Required Parameters:
 
 Optional Parameters:
 
@@ -27,8 +25,6 @@ Optional Parameters:
 
 ### avail\_kernels
 
-Required Parameters:
-
 Optional Parameters:
 
 - kernelid
@@ -36,21 +32,13 @@ Optional Parameters:
 
 ### avail\_linodeplans
 
-Required Parameters:
-
 Optional Parameters:
 
 - planid
 
 ### avail\_datacenters
 
-Required Parameters:
-
-Optional Parameters:
-
 ### avail\_distributions
-
-Required Parameters:
 
 Optional Parameters:
 
@@ -81,8 +69,6 @@ Required Parameters:
 
 - domainid
 
-Optional Parameters:
-
 ### domain\_update
 
 Required Parameters:
@@ -104,8 +90,6 @@ Optional Parameters:
 - status
 
 ### domain\_list
-
-Required Parameters:
 
 Optional Parameters:
 
@@ -134,8 +118,6 @@ Required Parameters:
 
 - resourceid
 - domainid
-
-Optional Parameters:
 
 ### domain\_resource\_update
 
@@ -170,8 +152,6 @@ Required Parameters:
 
 - linodeid
 
-Optional Parameters:
-
 ### linode\_create
 
 Required Parameters:
@@ -179,8 +159,6 @@ Required Parameters:
 - datacenterid
 - planid
 - paymentterm
-
-Optional Parameters:
 
 ### linode\_reboot
 
@@ -197,8 +175,6 @@ Optional Parameters:
 Required Parameters:
 
 - linodeid
-
-Optional Parameters:
 
 ### linode\_boot
 
@@ -217,8 +193,6 @@ Required Parameters:
 - linodeid
 - planid
 
-Optional Parameters:
-
 ### linode\_clone
 
 Required Parameters:
@@ -228,15 +202,11 @@ Required Parameters:
 - datacenterid
 - planid
 
-Optional Parameters:
-
 ### linode\_shutdown
 
 Required Parameters:
 
 - linodeid
-
-Optional Parameters:
 
 ### linode\_delete
 
@@ -278,8 +248,6 @@ Optional Parameters:
 
 ### linode\_list
 
-Required Parameters:
-
 Optional Parameters:
 
 - linodeid
@@ -312,8 +280,6 @@ Required Parameters:
 
 - linodeid
 - configid
-
-Optional Parameters:
 
 ### linode\_config\_update
 
@@ -357,8 +323,6 @@ Required Parameters:
 - type
 - linodeid
 
-Optional Parameters:
-
 ### linode\_disk\_resize
 
 Required Parameters:
@@ -366,8 +330,6 @@ Required Parameters:
 - diskid
 - linodeid
 - size
-
-Optional Parameters:
 
 ### linode\_disk\_createfromdistribution
 
@@ -390,16 +352,12 @@ Required Parameters:
 - diskid
 - linodeid
 
-Optional Parameters:
-
 ### linode\_disk\_delete
 
 Required Parameters:
 
 - linodeid
 - diskid
-
-Optional Parameters:
 
 ### linode\_disk\_update
 
@@ -435,15 +393,11 @@ Required Parameters:
 - rootpass
 - stackscriptudfresponses
 
-Optional Parameters:
-
 ### linode\_ip\_addprivate
 
 Required Parameters:
 
 - linodeid
-
-Optional Parameters:
 
 ### linode\_ip\_list
 
@@ -486,8 +440,6 @@ Required Parameters:
 
 - stackscriptid
 
-Optional Parameters:
-
 ### stackscript\_update
 
 Required Parameters:
@@ -504,8 +456,6 @@ Optional Parameters:
 - label
 
 ### stackscript\_list
-
-Required Parameters:
 
 Optional Parameters:
 
@@ -535,8 +485,6 @@ Optional Parameters:
 Required Parameters:
 
 - configid
-
-Optional Parameters:
 
 ### nodebalancer\_config\_update
 
@@ -586,8 +534,6 @@ Required Parameters:
 
 - nodeid
 
-Optional Parameters:
-
 ### nodebalancer\_node\_update
 
 Required Parameters:
@@ -617,8 +563,6 @@ Required Parameters:
 
 - username
 - password
-
-Optional Parameters:
 
 # Additional Helper Methods
 
