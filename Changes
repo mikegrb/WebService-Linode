@@ -1,5 +1,21 @@
 Revision history for WebService-Linode
 
+{{$NEXT}}
+    - Upstream API Changes
+        - New methods:
+            - Prefixed by account_: estimateinvoice, paybalance, updatecard
+            - Prefixed by linode_:  mutate, webconsoletoken
+        - New optional args for linode_update:
+            - ms_ssh_disabled, ms_ssh_ip, ms_ssh_port, ms_ssh_user
+    - Bugfix
+        - fix avail_plans requiring optional planid argument
+        - verify domain_resource_create and linode_config_create still require
+          primary key as avail_plans does in api.spec
+    - Dist Creation Changes
+        - converted dist creation to milla
+        - moved helper scripts to
+          https://github.com/mikegrb/WebService-Linode-AuthorUtils
+
 0.11  Nov 02 2012
     - fix primary keys marked as required param for domain_resource_create and
       linode_config_create (thanks Peter Stephan)

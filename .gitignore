@@ -1,0 +1,6 @@
+/WebService-Linode-*
+/.build
+/_build*
+/Build
+MYMETA.*
+!META.json

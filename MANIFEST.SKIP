@@ -1,7 +1,0 @@
-^MANIFEST\.
-^Makefile(\.old)?$
-^blib/
-^MakeMaker-\d
-^\.git/.*
-^gen-pod\.pl$
-^gen-validation.pl$

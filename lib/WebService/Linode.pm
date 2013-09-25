@@ -1431,49 +1431,6 @@ Takes a record name and domainid or domain and returns the resourceid.
 
 =back
 
-=head1 BUGS
-
-This module does not yet support the Linode API batch method, patches welcome.
-
-Please report any bugs or feature requests to C<bug-webservice-linode
-at rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WebService-Linode>.  I will
-be notified, and then you'll automatically be notified of progress on your
-bug as I make changes.
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc WebService::Linode
-
-
-You can also look for information at:
-
-=over 4
-
-=item * Module Repo
-
-L<http://git.thegrebs.com/?p=WebService-Linode;a=summary>
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=WebService-Linode>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/WebService-Linode>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/WebService-Linode>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/WebService-Linode>
-
-=back
-
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2008-2009 Linode, LLC, all rights reserved.

@@ -1,3 +1,0 @@
-- test that verifies LWP SSL support
-- detect lack of LWP SSL support at run time
-- gen-validation is just plain silly, it's about time for a total rewrite
