@@ -230,10 +230,6 @@ __END__
 
 WebService::Linode - Perl Interface to the Linode.com API.
 
-=head1 VERSION
-
-Version 0.11
-
 =head1 SYNOPSIS
 
     my $api = WebService::Linode->new( apikey => 'your api key here');

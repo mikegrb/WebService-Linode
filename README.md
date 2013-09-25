@@ -2,10 +2,6 @@
 
 WebService::Linode - Perl Interface to the Linode.com API.
 
-# VERSION
-
-Version 0.11
-
 # SYNOPSIS
 
     my $api = WebService::Linode->new( apikey => 'your api key here');
