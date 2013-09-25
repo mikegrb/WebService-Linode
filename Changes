@@ -1,4 +1,4 @@
-Revision history for WebService-Linode
+Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
     - Update link to Linode API docs
@@ -21,35 +21,35 @@ Revision history for WebService-Linode
         - moved helper scripts to
           https://github.com/mikegrb/WebService-Linode-AuthorUtils
 
-0.11  Nov 02 2012
+0.11 2012-02-11
     - fix primary keys marked as required param for domain_resource_create and
       linode_config_create (thanks Peter Stephan)
       - note: not fixed upstream yet gen-validation.pl output can not be used
         directly currently
 
-0.10  Aug 20 2012
+0.10 2012-20-08
     - updated API definition from api.spec after Linode fix, closes #79093
 
-0.09  Jul 29 2012
+0.09 2012-29-07
     - Forgot to bump version number in DNS.pm and Base.pm
         this is why all my other modules use Dist::Zilla
 
-0.08  Jul 29 2012
+0.08 2012-29-07
     - new upstream API calls added
         many additions including nodebalancer support
         see for full changes http://j.mp/MNKKTf
     - patch from stephon for deprecated DNS.pm (closes rt #71833)
 
-0.07  Feb 10 2012
+0.07 2012-10-02
     - Correct typo in resourceid argument to domain_resource->list
 
-0.06  Jan 12 1012
+0.06 1012-12-01
     - Correct reference to module name in docs (closes rt #59535 reported
       by Paul Hansen)
     - Use direct object notation rather than indirect notation
     - new upstream API calls added
 
-0.05  Mon Sep 14 2009
+0.05 2009-09-14
     - Apikey is no longer a required argument to the base constructor
     - New method in the base class, apikey for specifying or changing apikey
       at times other than construction
@@ -60,7 +60,7 @@ Revision history for WebService-Linode
     - fix WebService::Linode::DNS domainResourceGet when called with domain
       name rather than id. (closes #49452 reported by jtmink1)
 
-0.04  Mon Aug 10 21:45:49 EDT 2009
+0.04 2009-08-10 21:45:49 EDT
     - Update to Linode.com API version 2.0 -- This is a pretty big change,
       includes support for Linodes now as well as DNS
     - WebService::Linode::DNS is now deprecated but /should/ continue to work.
@@ -68,14 +68,14 @@ Revision history for WebService-Linode
       method names changed to match the Linode.com methods with dots replaced
       with under scores.
 
-0.03
+0.03 2008-12-10
     - Patch from Pat Hennessy to use $response->status_line for error
       message when no JSON found in the response (closes #41328)
     - Include Crypt::SSLeay in Makefile.PL prereqs and note about using
       IO::Socket::SSL instead in the README
     - Fix typo in WebService::Linode::DNS docs
 
-0.02  Mon Sep 15 20:45:20 EDT 2008
+0.02 2008-09-15 20:45:20 EDT
     - Cache last seen pub ip in examples/dyndns.pl
     - Fix typo in WebService::Linode::DNS (closes #39311)
     - Add tests that were there and should have caught above but
@@ -84,6 +84,6 @@ Revision history for WebService-Linode
     - Add license to Makefile.PL
     - Include gpg signed SIGNATURE file for Module::Signature
 
-0.01  Tue Jun 17 12:21:55 EDT 2008
+0.01 2008-06-17 12:21:55 EDT
     - First version, released on an unsuspecting world.
 
