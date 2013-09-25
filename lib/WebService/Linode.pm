@@ -239,7 +239,7 @@ WebService::Linode - Perl Interface to the Linode.com API.
 This module implements the Linode.com api methods.  Linode methods have had
 dots replaced with underscores to generate the perl method name.  All keys
 and parameters have been lower cased but returned data remains otherwise the
-same.  For additional information see L<http://www.linode.com/api/autodoc.cfm>
+same.  For additional information see L<http://www.linode.com/api/>
 
 =head1 Methods from the Linode API
 
