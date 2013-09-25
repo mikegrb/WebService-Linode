@@ -4,6 +4,8 @@ Revision history for Perl module WebService::Linode
     - Update link to Linode API docs
     - Clean up POD a bit, remove required/optional parameter headings when list
       is empty
+    - https://github.com/mikegrb/WebService-Linode/pull/2 to update older
+      change log entries to CPAN::Changes::Spec, thanks @neilbowers
 
 0.12  2013-09-25 14:58:18 EDT
     - Upstream API Changes
