@@ -1,6 +1,7 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - No functional changes in this release.
     - Update link to Linode API docs
     - Clean up POD a bit, remove required/optional parameter headings when list
       is empty
