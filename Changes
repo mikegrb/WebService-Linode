@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+
+0.13  2013-09-28 20:05:23 EDT
     - No functional changes in this release.
     - Update link to Linode API docs
     - Clean up POD a bit, remove required/optional parameter headings when list
