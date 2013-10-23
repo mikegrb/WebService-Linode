@@ -15,7 +15,7 @@ WebService::Linode::Base - Perl Interface to the Linode.com API.
 
 =cut
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 our $err;
 our $errstr;
 
