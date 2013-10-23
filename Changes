@@ -1,6 +1,7 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - Add Mozilla::CA to dependencies.
 
 0.13  2013-09-28 20:05:23 EDT
     - No functional changes in this release.
