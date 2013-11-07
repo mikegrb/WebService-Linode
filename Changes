@@ -1,6 +1,7 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - Treat error code 0 as OK
     - Update to latest API spec:
         - New optional argument for domain_create & domain_update:
             lpm_displaygroup

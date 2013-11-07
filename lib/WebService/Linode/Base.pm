@@ -68,28 +68,31 @@ sub parse_response {
     my $self = shift;
     my $response = shift;
 
-    if ($response->content =~ m|ERRORARRAY|i) {
-        my $json = from_json($response->content);
-        if (scalar (@{$json->{ERRORARRAY}}) == 0) {
-            return $json->{DATA};
-        } else {
+    if ( $response->content =~ m|ERRORARRAY|i ) {
+        my $json = from_json( $response->content );
+        if (scalar( @{ $json->{ERRORARRAY} } ) == 0
+            || ( scalar( @{ $json->{ERRORARRAY} } ) == 1
+                && $json->{ERRORARRAY}->[0]->{ERRORCODE} == 0 ) )
+        {   return $json->{DATA};
+        }
+        else {
             # TODO this only returns the first error from the API
 
-            my $msg = "API Error " .
-                $json->{ERRORARRAY}->[0]->{ERRORCODE} .  ": " .
-                $json->{ERRORARRAY}->[0]->{ERRORMESSAGE};
+            my $msg
+                = "API Error "
+                . $json->{ERRORARRAY}->[0]->{ERRORCODE} . ": "
+                . $json->{ERRORARRAY}->[0]->{ERRORMESSAGE};
 
-            $self->_error(
-                $json->{ERRORARRAY}->[0]->{ERRORCODE},
-                $msg
-            );
+            $self->_error( $json->{ERRORARRAY}->[0]->{ERRORCODE}, $msg );
             return;
         }
-    } elsif ($response->status_line) {
-        $self->_error(-1, $response->status_line);
+    }
+    elsif ( $response->status_line ) {
+        $self->_error( -1, $response->status_line );
         return;
-    } else {
-        $self->_error(-1, 'No JSON found');
+    }
+    else {
+        $self->_error( -1, 'No JSON found' );
         return;
     }
 }
