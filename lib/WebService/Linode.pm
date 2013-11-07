@@ -197,6 +197,7 @@ sub AUTOLOAD {
 }
 
 sub getDomainIDbyName {
+    carp "WebService::Linode::getDomainIDbyName() is deprecated and going away.";
     my ( $self, $name ) = @_;
     foreach my $domain ( @{ $self->domain_list() } ) {
         return $domain->{domainid} if $domain->{domain} eq $name;
@@ -205,6 +206,7 @@ sub getDomainIDbyName {
 }
 
 sub getDomainResourceIDbyName {
+    carp "WebService::Linode::getDomainResourceIDbyName() is deprecated and going away.";
     my ( $self, %args ) = @_;
     $self->_debug( 10, 'getResourceIDbyName called' );
 
