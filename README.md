@@ -20,15 +20,15 @@ same.  For additional information see [http://www.linode.com/api/](http://www.li
 Optional Parameters:
 
 - distributionid
-- keywords
 - distributionvendor
+- keywords
 
 ### avail\_kernels
 
 Optional Parameters:
 
-- kernelid
 - isxen
+- kernelid
 
 ### avail\_linodeplans
 
@@ -48,20 +48,21 @@ Optional Parameters:
 
 Required Parameters:
 
-- type
 - domain
+- type
 
 Optional Parameters:
 
-- refresh\_sec
-- retry\_sec
-- master\_ips
-- expire\_sec
-- soa\_email
 - axfr\_ips
 - description
-- ttl\_sec
+- expire\_sec
+- lpm\_displaygroup
+- master\_ips
+- refresh\_sec
+- retry\_sec
+- soa\_email
 - status
+- ttl\_sec
 
 ### domain\_delete
 
@@ -77,17 +78,18 @@ Required Parameters:
 
 Optional Parameters:
 
-- refresh\_sec
-- retry\_sec
-- master\_ips
-- type
-- expire\_sec
-- domain
-- soa\_email
 - axfr\_ips
 - description
-- ttl\_sec
+- domain
+- expire\_sec
+- lpm\_displaygroup
+- master\_ips
+- refresh\_sec
+- retry\_sec
+- soa\_email
 - status
+- ttl\_sec
+- type
 
 ### domain\_list
 
@@ -99,25 +101,25 @@ Optional Parameters:
 
 Required Parameters:
 
-- type
 - domainid
+- type
 
 Optional Parameters:
 
-- protocol
 - name
-- weight
-- target
-- priority
-- ttl\_sec
 - port
+- priority
+- protocol
+- target
+- ttl\_sec
+- weight
 
 ### domain\_resource\_delete
 
 Required Parameters:
 
-- resourceid
 - domainid
+- resourceid
 
 ### domain\_resource\_update
 
@@ -127,14 +129,14 @@ Required Parameters:
 
 Optional Parameters:
 
-- weight
-- target
-- priority
-- ttl\_sec
 - domainid
-- port
-- protocol
 - name
+- port
+- priority
+- protocol
+- target
+- ttl\_sec
+- weight
 
 ### domain\_resource\_list
 
@@ -157,8 +159,8 @@ Required Parameters:
 Required Parameters:
 
 - datacenterid
-- planid
 - paymentterm
+- planid
 
 ### linode\_reboot
 
@@ -197,9 +199,9 @@ Required Parameters:
 
 Required Parameters:
 
+- datacenterid
 - linodeid
 - paymentterm
-- datacenterid
 - planid
 
 ### linode\_shutdown
@@ -226,25 +228,25 @@ Required Parameters:
 
 Optional Parameters:
 
-- alert\_diskio\_threshold
-- lpm\_displaygroup
-- watchdog
+- alert\_bwin\_enabled
+- alert\_bwin\_threshold
+- alert\_bwout\_enabled
 - alert\_bwout\_threshold
+- alert\_bwquota\_enabled
+- alert\_bwquota\_threshold
+- alert\_cpu\_enabled
+- alert\_cpu\_threshold
+- alert\_diskio\_enabled
+- alert\_diskio\_threshold
+- backupweeklyday
+- backupwindow
+- label
+- lpm\_displaygroup
 - ms\_ssh\_disabled
 - ms\_ssh\_ip
-- ms\_ssh\_user
-- alert\_bwout\_enabled
-- alert\_diskio\_enabled
 - ms\_ssh\_port
-- alert\_bwquota\_enabled
-- alert\_bwin\_threshold
-- backupweeklyday
-- alert\_cpu\_enabled
-- alert\_bwquota\_threshold
-- backupwindow
-- alert\_cpu\_threshold
-- alert\_bwin\_enabled
-- label
+- ms\_ssh\_user
+- watchdog
 
 ### linode\_list
 
@@ -257,29 +259,29 @@ Optional Parameters:
 Required Parameters:
 
 - kernelid
-- linodeid
 - label
+- linodeid
 
 Optional Parameters:
 
-- rootdevicero
-- helper\_disableupdatedb
-- rootdevicenum
 - comments
-- rootdevicecustom
 - devtmpfs\_automount
-- ramlimit
-- runlevel
-- helper\_depmod
-- helper\_xen
 - disklist
+- helper\_depmod
+- helper\_disableupdatedb
+- helper\_xen
+- ramlimit
+- rootdevicecustom
+- rootdevicenum
+- rootdevicero
+- runlevel
 
 ### linode\_config\_delete
 
 Required Parameters:
 
-- linodeid
 - configid
+- linodeid
 
 ### linode\_config\_update
 
@@ -289,20 +291,20 @@ Required Parameters:
 
 Optional Parameters:
 
-- helper\_disableupdatedb
-- rootdevicero
 - comments
-- rootdevicenum
-- rootdevicecustom
-- kernelid
-- runlevel
-- ramlimit
 - devtmpfs\_automount
-- helper\_depmod
-- linodeid
-- helper\_xen
 - disklist
+- helper\_depmod
+- helper\_disableupdatedb
+- helper\_xen
+- kernelid
 - label
+- linodeid
+- ramlimit
+- rootdevicecustom
+- rootdevicenum
+- rootdevicero
+- runlevel
 
 ### linode\_config\_list
 
@@ -319,9 +321,35 @@ Optional Parameters:
 Required Parameters:
 
 - label
+- linodeid
 - size
 - type
+
+### linode\_disk\_createfromstackscript
+
+Required Parameters:
+
+- distributionid
+- label
 - linodeid
+- rootpass
+- size
+- stackscriptid
+- stackscriptudfresponses
+
+### linode\_disk\_createfromdistribution
+
+Required Parameters:
+
+- distributionid
+- label
+- linodeid
+- rootpass
+- size
+
+Optional Parameters:
+
+- rootsshkey
 
 ### linode\_disk\_resize
 
@@ -330,20 +358,6 @@ Required Parameters:
 - diskid
 - linodeid
 - size
-
-### linode\_disk\_createfromdistribution
-
-Required Parameters:
-
-- rootpass
-- linodeid
-- distributionid
-- size
-- label
-
-Optional Parameters:
-
-- rootsshkey
 
 ### linode\_disk\_duplicate
 
@@ -356,8 +370,8 @@ Required Parameters:
 
 Required Parameters:
 
-- linodeid
 - diskid
+- linodeid
 
 ### linode\_disk\_update
 
@@ -367,9 +381,9 @@ Required Parameters:
 
 Optional Parameters:
 
-- linodeid
-- label
 - isreadonly
+- label
+- linodeid
 
 ### linode\_disk\_list
 
@@ -380,18 +394,6 @@ Required Parameters:
 Optional Parameters:
 
 - diskid
-
-### linode\_disk\_createfromstackscript
-
-Required Parameters:
-
-- size
-- label
-- linodeid
-- stackscriptid
-- distributionid
-- rootpass
-- stackscriptudfresponses
 
 ### linode\_ip\_addprivate
 
@@ -417,22 +419,22 @@ Required Parameters:
 
 Optional Parameters:
 
-- pendingonly
 - jobid
+- pendingonly
 
 ### stackscript\_create
 
 Required Parameters:
 
-- label
 - distributionidlist
+- label
 - script
 
 Optional Parameters:
 
-- rev\_note
 - description
 - ispublic
+- rev\_note
 
 ### stackscript\_delete
 
@@ -448,12 +450,12 @@ Required Parameters:
 
 Optional Parameters:
 
-- distributionidlist
 - description
-- script
+- distributionidlist
 - ispublic
-- rev\_note
 - label
+- rev\_note
+- script
 
 ### stackscript\_list
 
@@ -469,16 +471,18 @@ Required Parameters:
 
 Optional Parameters:
 
-- protocol
-- check
-- check\_path
-- check\_interval
 - algorithm
+- check
 - check\_attempts
-- stickiness
-- check\_timeout
 - check\_body
+- check\_interval
+- check\_path
+- check\_timeout
 - port
+- protocol
+- ssl\_cert
+- ssl\_key
+- stickiness
 
 ### nodebalancer\_config\_delete
 
@@ -494,16 +498,18 @@ Required Parameters:
 
 Optional Parameters:
 
-- check\_body
-- stickiness
-- check\_attempts
-- check\_timeout
 - algorithm
-- port
 - check
-- protocol
-- check\_path
+- check\_attempts
+- check\_body
 - check\_interval
+- check\_path
+- check\_timeout
+- port
+- protocol
+- ssl\_cert
+- ssl\_key
+- stickiness
 
 ### nodebalancer\_config\_list
 
@@ -519,9 +525,9 @@ Optional Parameters:
 
 Required Parameters:
 
-- label
 - address
 - configid
+- label
 
 Optional Parameters:
 
@@ -542,9 +548,9 @@ Required Parameters:
 
 Optional Parameters:
 
-- mode
-- label
 - address
+- label
+- mode
 - weight
 
 ### nodebalancer\_node\_list
@@ -561,8 +567,8 @@ Optional Parameters:
 
 Required Parameters:
 
-- username
 - password
+- username
 
 # Additional Helper Methods
 
