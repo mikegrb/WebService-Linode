@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+
+0.15  2013-11-07 12:02:21 EST
     - Treat error code 0 as OK
     - Update to latest API spec:
         - New optional argument for domain_create & domain_update:

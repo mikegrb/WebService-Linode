@@ -9,7 +9,7 @@ use Carp;
 use List::Util qw(first);
 use WebService::Linode::Base;
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 our @ISA     = ("WebService::Linode::Base");
 our $AUTOLOAD;
 
