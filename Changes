@@ -1,6 +1,13 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - Update to latest API spec:
+        - New optional argument for domain_create & domain_update:
+            lpm_displaygroup
+        - New optional arguments for nodebalancer_config_create and
+          nodebalancer_config_update:
+            ssl_cert, ssl_key
+
 
 0.14  2013-10-23 11:04:39 EDT
     - Add Mozilla::CA to dependencies.
