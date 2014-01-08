@@ -57,8 +57,8 @@ my %validation = (
     },
     linode => {
         boot => [ ['linodeid'], ['configid'] ],
-        clone => [ [qw( datacenterid linodeid paymentterm planid )], [] ],
-        create => [ [qw( datacenterid paymentterm planid )], [] ],
+        clone => [ [qw( datacenterid linodeid planid )], [ 'paymentterm' ] ],
+        create => [ [qw( datacenterid planid )], [ 'paymentterm' ] ],
         delete => [ ['linodeid'], ['skipchecks'] ],
         list   => [ [],           ['linodeid'] ],
         mutate => [ ['linodeid'], [] ],
@@ -505,9 +505,15 @@ Required Parameters:
 
 =item * datacenterid
 
-=item * paymentterm
-
 =item * planid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * paymentterm
 
 =back
 
@@ -579,9 +585,15 @@ Required Parameters:
 
 =item * linodeid
 
-=item * paymentterm
-
 =item * planid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * paymentterm
 
 =back
 
@@ -1252,18 +1264,6 @@ Required Parameters:
 =item * username
 
 =back
-
-=head1 Additional Helper Methods
-
-These methods are deprecated and will be going away.
-
-=head3 getDomainIDbyName( domain => 'example.com' )
-
-Returns the ID for a domain given the name.
-
-=head3 getDomainResourceIDbyName( domainid => 242, name => 'www')
-
-Takes a record name and domainid or domain and returns the resourceid.
 
 =head1 AUTHORS
 
