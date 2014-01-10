@@ -2,6 +2,7 @@ Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
     - paymentterm is optional for linode.create and linode.clone
+    - remove deprecated getDomainIDbyName & getDomainResourceIDbyName
 
 0.16  2014-01-06 09:59:02 EST
     - useragent arg to constructor for custom user agent header

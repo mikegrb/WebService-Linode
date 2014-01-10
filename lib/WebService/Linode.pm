@@ -196,37 +196,6 @@ sub AUTOLOAD {
     croak "Undefined subroutine \&$AUTOLOAD called";
 }
 
-sub getDomainIDbyName {
-    carp "WebService::Linode::getDomainIDbyName() is deprecated and going away.";
-    my ( $self, $name ) = @_;
-    foreach my $domain ( @{ $self->domain_list() } ) {
-        return $domain->{domainid} if $domain->{domain} eq $name;
-    }
-    return;
-}
-
-sub getDomainResourceIDbyName {
-    carp "WebService::Linode::getDomainResourceIDbyName() is deprecated and going away.";
-    my ( $self, %args ) = @_;
-    $self->_debug( 10, 'getResourceIDbyName called' );
-
-    my $domainid = $args{domainid};
-    if ( !exists( $args{domainid} ) && exists( $args{domain} ) ) {
-        $domainid = $self->getDomainIDbyName( $args{domain} );
-    }
-
-    if ( !( defined($domainid) && exists( $args{name} ) ) ) {
-        $self->_error( -1,
-            'Must pass domain or domainid and (resource) name to getResourceIDbyName'
-        );
-        return;
-    }
-
-    for my $rr ( @{ $self->domain_resource_list( domainid => $domainid ) } ) {
-        return $rr->{resourceid} if $rr->{name} eq $args{name};
-    }
-}
-
 'mmm, cake';
 __END__
 
