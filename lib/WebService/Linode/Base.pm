@@ -24,6 +24,7 @@ sub new {
     my $self;
 
     $self->{_apikey}    = $args{apikey} if $args{apikey};
+    $self->{_apiurl}    = $args{apiurl} if $args{apiurl};
 
     $self->{_nocache}   = $args{nocache}    || 0;
     $self->{_debug}     = $args{debug}      || 0;
@@ -45,6 +46,12 @@ sub apikey {
     return $self->{_apikey};
 }
 
+sub apiurl {
+    my $self = shift;
+    $self->{_apiurl} = shift if @_ == 1;
+    return $self->{_apiurl};
+}
+
 sub do_request {
     my ($self, %args) = @_;
 
@@ -61,6 +68,7 @@ sub send_request {
     }
 
     $args{api_key} = $self->{_apikey} if $self->{_apikey};
+    $args{api_url} = $self->{_apiurl} if $self->{_apiurl};
 
     return $self->{_ua}->post( $self->{_apiurl}, content => { %args } );
 }
@@ -178,6 +186,13 @@ Takes one optional argument, an apikey that if passed replaces the key
 currently in use.  Returns the current (or new) apikey.
 
 Returns the apikey
+
+=head2 apiurl
+
+Takes one optional argument, an apiurl that if passed replaces the URL
+currently in use.  Returns the current (or new) apiurl.
+
+Returns the apiurl
 
 =head1 AUTHOR
 
