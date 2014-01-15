@@ -24,7 +24,6 @@ sub new {
     my $self;
 
     $self->{_apikey}    = $args{apikey} if $args{apikey};
-    $self->{_apiurl}    = $args{apiurl} if $args{apiurl};
 
     $self->{_nocache}   = $args{nocache}    || 0;
     $self->{_debug}     = $args{debug}      || 0;
