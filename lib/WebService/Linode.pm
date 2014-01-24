@@ -214,6 +214,11 @@ dots replaced with underscores to generate the perl method name.  All keys
 and parameters have been lower cased but returned data remains otherwise the
 same.  For additional information see L<http://www.linode.com/api/>
 
+=head1 Constructor
+
+For documentation of possible arguments to the constructor, see
+L<WebService::Linode::Base>.
+
 =head1 Methods from the Linode API
 
 =head3 avail_stackscripts
