@@ -9,7 +9,7 @@ if($@) {
 	plan skip_all => "Test::MockObject required for these tests" if $@;
 }
 else {
-	plan tests => 5
+	plan tests => 4
 }
 
 my $ua = Test::MockObject->new();
@@ -39,8 +39,6 @@ isa_ok($api, 'WebService::Linode');
 $response->set_always( 'content', scalar(<DATA>));
 $expected = eval scalar(<DATA>);
 is_deeply($api->domain_list(), $expected, 'domain_list');
-
-is ($api->getDomainIDbyName('apitest.com'), 5118, 'getDomainIDbyName');
 
 $response->set_always( 'content', scalar(<DATA>));
 $expected = eval scalar(<DATA>);
