@@ -4,7 +4,7 @@
       "=over"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Milla version v1.0.4, Dist::Zilla version 5.008, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Dist::Milla version v1.0.4, Dist::Zilla version 5.012, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -26,7 +26,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build::Tiny" : "0.030"
+            "Module::Build::Tiny" : "0.034"
          }
       },
       "develop" : {
@@ -62,7 +62,7 @@
          "web" : "https://github.com/mikegrb/WebService-Linode"
       }
    },
-   "version" : "0.16",
+   "version" : "0.17",
    "x_contributors" : [
       "Neil Bowers <neil@bowers.com>",
       "Stan Schwertly <stan@schwertly.com>",

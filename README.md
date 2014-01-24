@@ -13,6 +13,11 @@ dots replaced with underscores to generate the perl method name.  All keys
 and parameters have been lower cased but returned data remains otherwise the
 same.  For additional information see [http://www.linode.com/api/](http://www.linode.com/api/)
 
+# Constructor
+
+For documentation of possible arguments to the constructor, see
+[WebService::Linode::Base](https://metacpan.org/pod/WebService::Linode::Base).
+
 # Methods from the Linode API
 
 ### avail\_stackscripts
@@ -159,8 +164,11 @@ Required Parameters:
 Required Parameters:
 
 - datacenterid
-- paymentterm
 - planid
+
+Optional Parameters:
+
+- paymentterm
 
 ### linode\_reboot
 
@@ -201,8 +209,11 @@ Required Parameters:
 
 - datacenterid
 - linodeid
-- paymentterm
 - planid
+
+Optional Parameters:
+
+- paymentterm
 
 ### linode\_shutdown
 
@@ -569,18 +580,6 @@ Required Parameters:
 
 - password
 - username
-
-# Additional Helper Methods
-
-These methods are deprecated and will be going away.
-
-### getDomainIDbyName( domain => 'example.com' )
-
-Returns the ID for a domain given the name.
-
-### getDomainResourceIDbyName( domainid => 242, name => 'www')
-
-Takes a record name and domainid or domain and returns the resourceid.
 
 # AUTHORS
 
