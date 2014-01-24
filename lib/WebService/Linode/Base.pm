@@ -23,13 +23,14 @@ sub new {
     my ($package, %args) = @_;
     my $self;
 
-    $self->{_apikey}    = $args{apikey} if $args{apikey};
+    $self->{_apikey}  = $args{apikey} if $args{apikey};
 
-    $self->{_nocache}   = $args{nocache}    || 0;
-    $self->{_debug}     = $args{debug}      || 0;
-    $self->{_fatal}     = $args{fatal}      || 0;
-    $self->{_nowarn}    = $args{nowarn}     || 0;
-    $self->{_apiurl}    = $args{apiurl} || 'https://api.linode.com/api/';
+    $self->{_nocache} = $args{nocache} || 0;
+    $self->{_debug}   = $args{debug}   || 0;
+    $self->{_fatal}   = $args{fatal}   || 0;
+    $self->{_nowarn}  = $args{nowarn}  || 0;
+    $self->{_apiurl}  = $args{apiurl}  || 'https://api.linode.com/api/';
+
 
     $self->{_ua} = LWP::UserAgent->new;
     $self->{_ua}->agent("WebService::Linode::Base/$WebService::Linode::Base::VERSION ");
