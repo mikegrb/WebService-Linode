@@ -151,7 +151,9 @@ my %validation = (
         ],
     },
     test => { echo => [ [], [] ], },
-    user => { getapikey => [ [ 'password', 'username' ], [] ], },
+    user => {
+        getapikey => [ [qw( password username )], [qw( expires label token )] ],
+    },
 );
 
 sub AUTOLOAD {
@@ -1236,6 +1238,18 @@ Required Parameters:
 =item * password
 
 =item * username
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * expires
+
+=item * label
+
+=item * token
 
 =back
 

@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - API 2 factor authentication support, see:
+    <https://blog.linode.com/2014/02/03/linode-api-multiple-keys-and-two-factor/>
 
 0.17  2014-01-24 09:30:48 EST
     - remove deprecated getDomainIDbyName & getDomainResourceIDbyName
