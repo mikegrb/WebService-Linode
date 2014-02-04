@@ -62,11 +62,12 @@
          "web" : "https://github.com/mikegrb/WebService-Linode"
       }
    },
-   "version" : "0.17",
+   "version" : "0.18",
    "x_contributors" : [
       "Neil Bowers <neil@bowers.com>",
       "Stan Schwertly <stan@schwertly.com>",
-      "mikegrb <michael@thegrebs.com>"
+      "mikegrb <michael@thegrebs.com>",
+      "trevorparker <trevor@trevorparker.com>"
    ]
 }
 

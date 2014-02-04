@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+
+0.18  2014-02-04 11:36:24 EST
     - API 2 factor authentication support, see:
     <https://blog.linode.com/2014/02/03/linode-api-multiple-keys-and-two-factor/>
 

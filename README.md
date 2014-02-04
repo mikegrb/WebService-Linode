@@ -581,6 +581,12 @@ Required Parameters:
 - password
 - username
 
+Optional Parameters:
+
+- expires
+- label
+- token
+
 # AUTHORS
 
 - Michael Greb, `<mgreb@linode.com>`

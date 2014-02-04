@@ -12,7 +12,7 @@ WebService::Linode::DNS - Deprecated Perl Interface to the Linode.com API DNS me
 
 =cut
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 our @ISA = ("WebService::Linode::Base");
 
 sub getDomainIDbyName {
