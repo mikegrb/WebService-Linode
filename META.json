@@ -4,7 +4,7 @@
       "=over"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Milla version v1.0.4, Dist::Zilla version 5.012, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Dist::Milla version v1.0.4, Dist::Zilla version 5.013, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -37,10 +37,8 @@
       },
       "runtime" : {
          "requires" : {
-            "Crypt::SSLeay" : "0",
             "JSON" : "2.00",
-            "LWP::UserAgent" : "0",
-            "Mozilla::CA" : "0",
+            "LWP::Protocol::https" : "0",
             "perl" : "5.008005"
          }
       },
