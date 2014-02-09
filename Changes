@@ -1,6 +1,9 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - moar deprecated WebService::Linode::DNS
+      - all methods carp
+      - most of POD replaced, points to WebService::Linode
 
 0.19  2014-02-09 00:28:23 EST
     - depend on just LWP::Protocol::https instead of LWP::UserAgent,
