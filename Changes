@@ -1,6 +1,7 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - Update FSF mailing address in LICENSE, thanks Christopher Meng (cicku)
 
 0.18  2014-02-04 11:36:24 EST
     - API 2 factor authentication support, see:
