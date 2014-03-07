@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - support for adding new private and public IPs to a Linode
+    - support for swapping/moving an IP between Linodes
     - moar deprecated WebService::Linode::DNS
       - all methods carp
       - most of POD replaced, points to WebService::Linode
