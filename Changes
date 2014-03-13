@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+
+0.20  2014-03-13 11:42:49 EDT
     - support for adding new private and public IPs to a Linode
     - support for swapping/moving an IP between Linodes
     - moar deprecated WebService::Linode::DNS
