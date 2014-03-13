@@ -406,7 +406,24 @@ Optional Parameters:
 
 - diskid
 
+### linode\_ip\_swap
+
+Required Parameters:
+
+- ipaddressid
+
+Optional Parameters:
+
+- tolinodeid
+- withipaddressid
+
 ### linode\_ip\_addprivate
+
+Required Parameters:
+
+- linodeid
+
+### linode\_ip\_addpublic
 
 Required Parameters:
 
@@ -500,6 +517,7 @@ Optional Parameters:
 Required Parameters:
 
 - configid
+- nodebalancerid
 
 ### nodebalancer\_config\_update
 

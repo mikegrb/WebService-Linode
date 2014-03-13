@@ -38,6 +38,7 @@
       "runtime" : {
          "requires" : {
             "JSON" : "2.00",
+            "LWP" : "0",
             "LWP::Protocol::https" : "0",
             "perl" : "5.008005"
          }
