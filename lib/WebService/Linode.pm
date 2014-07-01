@@ -28,6 +28,7 @@ my %validation = (
         distributions => [ [], [ 'distributionid' ] ],
         kernels => [ [], [ 'isxen', 'kernelid' ] ],
         linodeplans => [ [], [ 'planid' ] ],
+        nodebalancers => [ [], [] ],
         stackscripts => [ [], [qw( distributionid distributionvendor keywords )] ],
     },
     domain => {
@@ -62,9 +63,9 @@ my %validation = (
         update => [ [ 'configid' ], [qw( comments devtmpfs_automount disklist helper_depmod helper_disableupdatedb helper_xen kernelid label linodeid ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
     },
     linode_disk => {
-        create => [ [qw( label linodeid size type )], [] ],
+        create => [ [qw( label linodeid size type )], [qw( fromdistributionid isreadonly rootpass rootsshkey )] ],
         createfromdistribution => [ [qw( distributionid label linodeid rootpass size )], [ 'rootsshkey' ] ],
-        createfromstackscript => [ [qw( distributionid label linodeid rootpass size stackscriptid stackscriptudfresponses )], [] ],
+        createfromstackscript => [ [qw( distributionid label linodeid rootpass size stackscriptid stackscriptudfresponses )], [ 'rootsshkey' ] ],
         delete => [ [ 'diskid', 'linodeid' ], [] ],
         duplicate => [ [ 'diskid', 'linodeid' ], [] ],
         list => [ [ 'linodeid' ], [ 'diskid' ] ],
@@ -75,13 +76,14 @@ my %validation = (
         addprivate => [ [ 'linodeid' ], [] ],
         addpublic => [ [ 'linodeid' ], [] ],
         list => [ [ 'linodeid' ], [ 'ipaddressid' ] ],
+        setrdns => [ [ 'hostname', 'ipaddressid' ], [] ],
         swap => [ [ 'ipaddressid' ], [ 'tolinodeid', 'withipaddressid' ] ],
     },
     linode_job => {
         list => [ [ 'linodeid' ], [ 'jobid', 'pendingonly' ] ],
     },
     nodebalancer => {
-        create => [ [ 'datacenterid', 'paymentterm' ], [ 'clientconnthrottle', 'label' ] ],
+        create => [ [ 'datacenterid' ], [qw( clientconnthrottle label paymentterm )] ],
         delete => [ [ 'nodebalancerid' ], [] ],
         list => [ [], [ 'nodebalancerid' ] ],
         update => [ [ 'nodebalancerid' ], [ 'clientconnthrottle', 'label' ] ],
@@ -179,19 +181,7 @@ L<WebService::Linode::Base>.
 
 =head1 Methods from the Linode API
 
-=head3 avail_stackscripts
-
-Optional Parameters:
-
-=over 4
-
-=item * distributionid
-
-=item * distributionvendor
-
-=item * keywords
-
-=back
+=head3 avail_datacenters
 
 =head3 avail_kernels
 
@@ -215,7 +205,21 @@ Optional Parameters:
 
 =back
 
-=head3 avail_datacenters
+=head3 avail_nodebalancers
+
+=head3 avail_stackscripts
+
+Optional Parameters:
+
+=over 4
+
+=item * distributionid
+
+=item * distributionvendor
+
+=item * keywords
+
+=back
 
 =head3 avail_distributions
 
@@ -224,6 +228,16 @@ Optional Parameters:
 =over 4
 
 =item * distributionid
+
+=back
+
+=head3 domain_delete
+
+Required Parameters:
+
+=over 4
+
+=item * domainid
 
 =back
 
@@ -262,16 +276,6 @@ Optional Parameters:
 =item * status
 
 =item * ttl_sec
-
-=back
-
-=head3 domain_delete
-
-Required Parameters:
-
-=over 4
-
-=item * domainid
 
 =back
 
@@ -325,6 +329,18 @@ Optional Parameters:
 
 =back
 
+=head3 domain_resource_delete
+
+Required Parameters:
+
+=over 4
+
+=item * domainid
+
+=item * resourceid
+
+=back
+
 =head3 domain_resource_create
 
 Required Parameters:
@@ -357,13 +373,19 @@ Optional Parameters:
 
 =back
 
-=head3 domain_resource_delete
+=head3 domain_resource_list
 
 Required Parameters:
 
 =over 4
 
 =item * domainid
+
+=back
+
+Optional Parameters:
+
+=over 4
 
 =item * resourceid
 
@@ -401,135 +423,7 @@ Optional Parameters:
 
 =back
 
-=head3 domain_resource_list
-
-Required Parameters:
-
-=over 4
-
-=item * domainid
-
-=back
-
-Optional Parameters:
-
-=over 4
-
-=item * resourceid
-
-=back
-
-=head3 linode_mutate
-
-Required Parameters:
-
-=over 4
-
-=item * linodeid
-
-=back
-
-=head3 linode_create
-
-Required Parameters:
-
-=over 4
-
-=item * datacenterid
-
-=item * planid
-
-=back
-
-Optional Parameters:
-
-=over 4
-
-=item * paymentterm
-
-=back
-
-=head3 linode_reboot
-
-Required Parameters:
-
-=over 4
-
-=item * linodeid
-
-=back
-
-Optional Parameters:
-
-=over 4
-
-=item * configid
-
-=back
-
 =head3 linode_webconsoletoken
-
-Required Parameters:
-
-=over 4
-
-=item * linodeid
-
-=back
-
-=head3 linode_boot
-
-Required Parameters:
-
-=over 4
-
-=item * linodeid
-
-=back
-
-Optional Parameters:
-
-=over 4
-
-=item * configid
-
-=back
-
-=head3 linode_resize
-
-Required Parameters:
-
-=over 4
-
-=item * linodeid
-
-=item * planid
-
-=back
-
-=head3 linode_clone
-
-Required Parameters:
-
-=over 4
-
-=item * datacenterid
-
-=item * linodeid
-
-=item * planid
-
-=back
-
-Optional Parameters:
-
-=over 4
-
-=item * paymentterm
-
-=back
-
-=head3 linode_shutdown
 
 Required Parameters:
 
@@ -554,6 +448,54 @@ Optional Parameters:
 =over 4
 
 =item * skipchecks
+
+=back
+
+=head3 linode_boot
+
+Required Parameters:
+
+=over 4
+
+=item * linodeid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * configid
+
+=back
+
+=head3 linode_create
+
+Required Parameters:
+
+=over 4
+
+=item * datacenterid
+
+=item * planid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * paymentterm
+
+=back
+
+=head3 linode_shutdown
+
+Required Parameters:
+
+=over 4
+
+=item * linodeid
 
 =back
 
@@ -611,11 +553,85 @@ Optional Parameters:
 
 =back
 
+=head3 linode_resize
+
+Required Parameters:
+
+=over 4
+
+=item * linodeid
+
+=item * planid
+
+=back
+
+=head3 linode_mutate
+
+Required Parameters:
+
+=over 4
+
+=item * linodeid
+
+=back
+
+=head3 linode_clone
+
+Required Parameters:
+
+=over 4
+
+=item * datacenterid
+
+=item * linodeid
+
+=item * planid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * paymentterm
+
+=back
+
 =head3 linode_list
 
 Optional Parameters:
 
 =over 4
+
+=item * linodeid
+
+=back
+
+=head3 linode_reboot
+
+Required Parameters:
+
+=over 4
+
+=item * linodeid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * configid
+
+=back
+
+=head3 linode_config_delete
+
+Required Parameters:
+
+=over 4
+
+=item * configid
 
 =item * linodeid
 
@@ -660,18 +676,6 @@ Optional Parameters:
 =item * rootdevicero
 
 =item * runlevel
-
-=back
-
-=head3 linode_config_delete
-
-Required Parameters:
-
-=over 4
-
-=item * configid
-
-=item * linodeid
 
 =back
 
@@ -737,41 +741,15 @@ Optional Parameters:
 
 =back
 
-=head3 linode_disk_create
+=head3 linode_disk_duplicate
 
 Required Parameters:
 
 =over 4
 
-=item * label
+=item * diskid
 
 =item * linodeid
-
-=item * size
-
-=item * type
-
-=back
-
-=head3 linode_disk_createfromstackscript
-
-Required Parameters:
-
-=over 4
-
-=item * distributionid
-
-=item * label
-
-=item * linodeid
-
-=item * rootpass
-
-=item * size
-
-=item * stackscriptid
-
-=item * stackscriptudfresponses
 
 =back
 
@@ -801,29 +779,51 @@ Optional Parameters:
 
 =back
 
-=head3 linode_disk_resize
+=head3 linode_disk_list
 
 Required Parameters:
 
 =over 4
 
+=item * linodeid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
 =item * diskid
+
+=back
+
+=head3 linode_disk_create
+
+Required Parameters:
+
+=over 4
+
+=item * label
 
 =item * linodeid
 
 =item * size
 
+=item * type
+
 =back
 
-=head3 linode_disk_duplicate
-
-Required Parameters:
+Optional Parameters:
 
 =over 4
 
-=item * diskid
+=item * fromdistributionid
 
-=item * linodeid
+=item * isreadonly
+
+=item * rootpass
+
+=item * rootsshkey
 
 =back
 
@@ -836,6 +836,50 @@ Required Parameters:
 =item * diskid
 
 =item * linodeid
+
+=back
+
+=head3 linode_disk_createfromstackscript
+
+Required Parameters:
+
+=over 4
+
+=item * distributionid
+
+=item * label
+
+=item * linodeid
+
+=item * rootpass
+
+=item * size
+
+=item * stackscriptid
+
+=item * stackscriptudfresponses
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * rootsshkey
+
+=back
+
+=head3 linode_disk_resize
+
+Required Parameters:
+
+=over 4
+
+=item * diskid
+
+=item * linodeid
+
+=item * size
 
 =back
 
@@ -861,7 +905,7 @@ Optional Parameters:
 
 =back
 
-=head3 linode_disk_list
+=head3 linode_ip_addpublic
 
 Required Parameters:
 
@@ -871,45 +915,19 @@ Required Parameters:
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=item * diskid
-
-=back
-
-=head3 linode_ip_swap
+=head3 linode_ip_setrdns
 
 Required Parameters:
 
 =over 4
+
+=item * hostname
 
 =item * ipaddressid
 
 =back
 
-Optional Parameters:
-
-=over 4
-
-=item * tolinodeid
-
-=item * withipaddressid
-
-=back
-
 =head3 linode_ip_addprivate
-
-Required Parameters:
-
-=over 4
-
-=item * linodeid
-
-=back
-
-=head3 linode_ip_addpublic
 
 Required Parameters:
 
@@ -937,6 +955,26 @@ Optional Parameters:
 
 =back
 
+=head3 linode_ip_swap
+
+Required Parameters:
+
+=over 4
+
+=item * ipaddressid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * tolinodeid
+
+=item * withipaddressid
+
+=back
+
 =head3 linode_job_list
 
 Required Parameters:
@@ -954,42 +992,6 @@ Optional Parameters:
 =item * jobid
 
 =item * pendingonly
-
-=back
-
-=head3 stackscript_create
-
-Required Parameters:
-
-=over 4
-
-=item * distributionidlist
-
-=item * label
-
-=item * script
-
-=back
-
-Optional Parameters:
-
-=over 4
-
-=item * description
-
-=item * ispublic
-
-=item * rev_note
-
-=back
-
-=head3 stackscript_delete
-
-Required Parameters:
-
-=over 4
-
-=item * stackscriptid
 
 =back
 
@@ -1031,13 +1033,17 @@ Optional Parameters:
 
 =back
 
-=head3 nodebalancer_config_create
+=head3 stackscript_create
 
 Required Parameters:
 
 =over 4
 
-=item * nodebalancerid
+=item * distributionidlist
+
+=item * label
+
+=item * script
 
 =back
 
@@ -1045,29 +1051,21 @@ Optional Parameters:
 
 =over 4
 
-=item * algorithm
+=item * description
 
-=item * check
+=item * ispublic
 
-=item * check_attempts
+=item * rev_note
 
-=item * check_body
+=back
 
-=item * check_interval
+=head3 stackscript_delete
 
-=item * check_path
+Required Parameters:
 
-=item * check_timeout
+=over 4
 
-=item * port
-
-=item * protocol
-
-=item * ssl_cert
-
-=item * ssl_key
-
-=item * stickiness
+=item * stackscriptid
 
 =back
 
@@ -1083,13 +1081,13 @@ Required Parameters:
 
 =back
 
-=head3 nodebalancer_config_update
+=head3 nodebalancer_config_create
 
 Required Parameters:
 
 =over 4
 
-=item * configid
+=item * nodebalancerid
 
 =back
 
@@ -1141,6 +1139,56 @@ Optional Parameters:
 
 =back
 
+=head3 nodebalancer_config_update
+
+Required Parameters:
+
+=over 4
+
+=item * configid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * algorithm
+
+=item * check
+
+=item * check_attempts
+
+=item * check_body
+
+=item * check_interval
+
+=item * check_path
+
+=item * check_timeout
+
+=item * port
+
+=item * protocol
+
+=item * ssl_cert
+
+=item * ssl_key
+
+=item * stickiness
+
+=back
+
+=head3 nodebalancer_node_delete
+
+Required Parameters:
+
+=over 4
+
+=item * nodeid
+
+=back
+
 =head3 nodebalancer_node_create
 
 Required Parameters:
@@ -1162,16 +1210,6 @@ Optional Parameters:
 =item * mode
 
 =item * weight
-
-=back
-
-=head3 nodebalancer_node_delete
-
-Required Parameters:
-
-=over 4
-
-=item * nodeid
 
 =back
 

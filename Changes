@@ -1,6 +1,11 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - new avail_nodebalancers and linode_ip_setrdns methods
+    - linode_disk_create now optionaly takes fromdistributionid, isreadonly,   
+      rootpass, and rootsshkey
+    - linode_disk_createfromstackscript now optionally takes rootsshkey
+    - paymentterm is now optional for nodebalancer_create
 
 0.20  2014-03-13 11:42:49 EDT
     - support for adding new private and public IPs to a Linode
