@@ -20,13 +20,7 @@ For documentation of possible arguments to the constructor, see
 
 # Methods from the Linode API
 
-### avail\_stackscripts
-
-Optional Parameters:
-
-- distributionid
-- distributionvendor
-- keywords
+### avail\_datacenters
 
 ### avail\_kernels
 
@@ -41,13 +35,27 @@ Optional Parameters:
 
 - planid
 
-### avail\_datacenters
+### avail\_nodebalancers
+
+### avail\_stackscripts
+
+Optional Parameters:
+
+- distributionid
+- distributionvendor
+- keywords
 
 ### avail\_distributions
 
 Optional Parameters:
 
 - distributionid
+
+### domain\_delete
+
+Required Parameters:
+
+- domainid
 
 ### domain\_create
 
@@ -68,12 +76,6 @@ Optional Parameters:
 - soa\_email
 - status
 - ttl\_sec
-
-### domain\_delete
-
-Required Parameters:
-
-- domainid
 
 ### domain\_update
 
@@ -102,6 +104,13 @@ Optional Parameters:
 
 - domainid
 
+### domain\_resource\_delete
+
+Required Parameters:
+
+- domainid
+- resourceid
+
 ### domain\_resource\_create
 
 Required Parameters:
@@ -119,11 +128,14 @@ Optional Parameters:
 - ttl\_sec
 - weight
 
-### domain\_resource\_delete
+### domain\_resource\_list
 
 Required Parameters:
 
 - domainid
+
+Optional Parameters:
+
 - resourceid
 
 ### domain\_resource\_update
@@ -143,79 +155,7 @@ Optional Parameters:
 - ttl\_sec
 - weight
 
-### domain\_resource\_list
-
-Required Parameters:
-
-- domainid
-
-Optional Parameters:
-
-- resourceid
-
-### linode\_mutate
-
-Required Parameters:
-
-- linodeid
-
-### linode\_create
-
-Required Parameters:
-
-- datacenterid
-- planid
-
-Optional Parameters:
-
-- paymentterm
-
-### linode\_reboot
-
-Required Parameters:
-
-- linodeid
-
-Optional Parameters:
-
-- configid
-
 ### linode\_webconsoletoken
-
-Required Parameters:
-
-- linodeid
-
-### linode\_boot
-
-Required Parameters:
-
-- linodeid
-
-Optional Parameters:
-
-- configid
-
-### linode\_resize
-
-Required Parameters:
-
-- linodeid
-- planid
-
-### linode\_clone
-
-Required Parameters:
-
-- datacenterid
-- linodeid
-- planid
-
-Optional Parameters:
-
-- paymentterm
-
-### linode\_shutdown
 
 Required Parameters:
 
@@ -230,6 +170,33 @@ Required Parameters:
 Optional Parameters:
 
 - skipchecks
+
+### linode\_boot
+
+Required Parameters:
+
+- linodeid
+
+Optional Parameters:
+
+- configid
+
+### linode\_create
+
+Required Parameters:
+
+- datacenterid
+- planid
+
+Optional Parameters:
+
+- paymentterm
+
+### linode\_shutdown
+
+Required Parameters:
+
+- linodeid
 
 ### linode\_update
 
@@ -259,10 +226,52 @@ Optional Parameters:
 - ms\_ssh\_user
 - watchdog
 
+### linode\_resize
+
+Required Parameters:
+
+- linodeid
+- planid
+
+### linode\_mutate
+
+Required Parameters:
+
+- linodeid
+
+### linode\_clone
+
+Required Parameters:
+
+- datacenterid
+- linodeid
+- planid
+
+Optional Parameters:
+
+- paymentterm
+
 ### linode\_list
 
 Optional Parameters:
 
+- linodeid
+
+### linode\_reboot
+
+Required Parameters:
+
+- linodeid
+
+Optional Parameters:
+
+- configid
+
+### linode\_config\_delete
+
+Required Parameters:
+
+- configid
 - linodeid
 
 ### linode\_config\_create
@@ -286,13 +295,6 @@ Optional Parameters:
 - rootdevicenum
 - rootdevicero
 - runlevel
-
-### linode\_config\_delete
-
-Required Parameters:
-
-- configid
-- linodeid
 
 ### linode\_config\_update
 
@@ -327,26 +329,12 @@ Optional Parameters:
 
 - configid
 
-### linode\_disk\_create
+### linode\_disk\_duplicate
 
 Required Parameters:
 
-- label
+- diskid
 - linodeid
-- size
-- type
-
-### linode\_disk\_createfromstackscript
-
-Required Parameters:
-
-- distributionid
-- label
-- linodeid
-- rootpass
-- size
-- stackscriptid
-- stackscriptudfresponses
 
 ### linode\_disk\_createfromdistribution
 
@@ -362,20 +350,31 @@ Optional Parameters:
 
 - rootsshkey
 
-### linode\_disk\_resize
+### linode\_disk\_list
 
 Required Parameters:
 
+- linodeid
+
+Optional Parameters:
+
 - diskid
+
+### linode\_disk\_create
+
+Required Parameters:
+
+- label
 - linodeid
 - size
+- type
 
-### linode\_disk\_duplicate
+Optional Parameters:
 
-Required Parameters:
-
-- diskid
-- linodeid
+- fromdistributionid
+- isreadonly
+- rootpass
+- rootsshkey
 
 ### linode\_disk\_delete
 
@@ -383,6 +382,30 @@ Required Parameters:
 
 - diskid
 - linodeid
+
+### linode\_disk\_createfromstackscript
+
+Required Parameters:
+
+- distributionid
+- label
+- linodeid
+- rootpass
+- size
+- stackscriptid
+- stackscriptudfresponses
+
+Optional Parameters:
+
+- rootsshkey
+
+### linode\_disk\_resize
+
+Required Parameters:
+
+- diskid
+- linodeid
+- size
 
 ### linode\_disk\_update
 
@@ -396,34 +419,20 @@ Optional Parameters:
 - label
 - linodeid
 
-### linode\_disk\_list
+### linode\_ip\_addpublic
 
 Required Parameters:
 
 - linodeid
 
-Optional Parameters:
-
-- diskid
-
-### linode\_ip\_swap
+### linode\_ip\_setrdns
 
 Required Parameters:
 
+- hostname
 - ipaddressid
 
-Optional Parameters:
-
-- tolinodeid
-- withipaddressid
-
 ### linode\_ip\_addprivate
-
-Required Parameters:
-
-- linodeid
-
-### linode\_ip\_addpublic
 
 Required Parameters:
 
@@ -439,6 +448,17 @@ Optional Parameters:
 
 - ipaddressid
 
+### linode\_ip\_swap
+
+Required Parameters:
+
+- ipaddressid
+
+Optional Parameters:
+
+- tolinodeid
+- withipaddressid
+
 ### linode\_job\_list
 
 Required Parameters:
@@ -449,26 +469,6 @@ Optional Parameters:
 
 - jobid
 - pendingonly
-
-### stackscript\_create
-
-Required Parameters:
-
-- distributionidlist
-- label
-- script
-
-Optional Parameters:
-
-- description
-- ispublic
-- rev\_note
-
-### stackscript\_delete
-
-Required Parameters:
-
-- stackscriptid
 
 ### stackscript\_update
 
@@ -491,26 +491,25 @@ Optional Parameters:
 
 - stackscriptid
 
-### nodebalancer\_config\_create
+### stackscript\_create
 
 Required Parameters:
 
-- nodebalancerid
+- distributionidlist
+- label
+- script
 
 Optional Parameters:
 
-- algorithm
-- check
-- check\_attempts
-- check\_body
-- check\_interval
-- check\_path
-- check\_timeout
-- port
-- protocol
-- ssl\_cert
-- ssl\_key
-- stickiness
+- description
+- ispublic
+- rev\_note
+
+### stackscript\_delete
+
+Required Parameters:
+
+- stackscriptid
 
 ### nodebalancer\_config\_delete
 
@@ -519,11 +518,11 @@ Required Parameters:
 - configid
 - nodebalancerid
 
-### nodebalancer\_config\_update
+### nodebalancer\_config\_create
 
 Required Parameters:
 
-- configid
+- nodebalancerid
 
 Optional Parameters:
 
@@ -550,6 +549,33 @@ Optional Parameters:
 
 - configid
 
+### nodebalancer\_config\_update
+
+Required Parameters:
+
+- configid
+
+Optional Parameters:
+
+- algorithm
+- check
+- check\_attempts
+- check\_body
+- check\_interval
+- check\_path
+- check\_timeout
+- port
+- protocol
+- ssl\_cert
+- ssl\_key
+- stickiness
+
+### nodebalancer\_node\_delete
+
+Required Parameters:
+
+- nodeid
+
 ### nodebalancer\_node\_create
 
 Required Parameters:
@@ -562,12 +588,6 @@ Optional Parameters:
 
 - mode
 - weight
-
-### nodebalancer\_node\_delete
-
-Required Parameters:
-
-- nodeid
 
 ### nodebalancer\_node\_update
 
