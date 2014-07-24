@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - support for the Linode Images service, currently in beta
+      see <https://forum.linode.com/viewtopic.php?f=26&t=11180>
 
 0.21  2014-07-01 13:02:10 EDT
     - new avail_nodebalancers and linode_ip_setrdns methods
