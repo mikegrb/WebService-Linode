@@ -22,6 +22,14 @@ For documentation of possible arguments to the constructor, see
 
 ### avail\_datacenters
 
+### avail\_nodebalancers
+
+### avail\_distributions
+
+Optional Parameters:
+
+- distributionid
+
 ### avail\_kernels
 
 Optional Parameters:
@@ -35,8 +43,6 @@ Optional Parameters:
 
 - planid
 
-### avail\_nodebalancers
-
 ### avail\_stackscripts
 
 Optional Parameters:
@@ -45,37 +51,11 @@ Optional Parameters:
 - distributionvendor
 - keywords
 
-### avail\_distributions
+### domain\_list
 
 Optional Parameters:
-
-- distributionid
-
-### domain\_delete
-
-Required Parameters:
 
 - domainid
-
-### domain\_create
-
-Required Parameters:
-
-- domain
-- type
-
-Optional Parameters:
-
-- axfr\_ips
-- description
-- expire\_sec
-- lpm\_displaygroup
-- master\_ips
-- refresh\_sec
-- retry\_sec
-- soa\_email
-- status
-- ttl\_sec
 
 ### domain\_update
 
@@ -98,11 +78,58 @@ Optional Parameters:
 - ttl\_sec
 - type
 
-### domain\_list
+### domain\_create
+
+Required Parameters:
+
+- domain
+- type
+
+Optional Parameters:
+
+- axfr\_ips
+- description
+- expire\_sec
+- lpm\_displaygroup
+- master\_ips
+- refresh\_sec
+- retry\_sec
+- soa\_email
+- status
+- ttl\_sec
+
+### domain\_delete
+
+Required Parameters:
+
+- domainid
+
+### domain\_resource\_update
+
+Required Parameters:
+
+- resourceid
 
 Optional Parameters:
 
 - domainid
+- name
+- port
+- priority
+- protocol
+- target
+- ttl\_sec
+- weight
+
+### domain\_resource\_list
+
+Required Parameters:
+
+- domainid
+
+Optional Parameters:
+
+- resourceid
 
 ### domain\_resource\_delete
 
@@ -128,48 +155,24 @@ Optional Parameters:
 - ttl\_sec
 - weight
 
-### domain\_resource\_list
-
-Required Parameters:
-
-- domainid
-
-Optional Parameters:
-
-- resourceid
-
-### domain\_resource\_update
-
-Required Parameters:
-
-- resourceid
-
-Optional Parameters:
-
-- domainid
-- name
-- port
-- priority
-- protocol
-- target
-- ttl\_sec
-- weight
-
-### linode\_webconsoletoken
+### linode\_resize
 
 Required Parameters:
 
 - linodeid
+- planid
 
-### linode\_delete
+### linode\_list
+
+Optional Parameters:
+
+- linodeid
+
+### linode\_mutate
 
 Required Parameters:
 
 - linodeid
-
-Optional Parameters:
-
-- skipchecks
 
 ### linode\_boot
 
@@ -192,11 +195,17 @@ Optional Parameters:
 
 - paymentterm
 
-### linode\_shutdown
+### linode\_clone
 
 Required Parameters:
 
+- datacenterid
 - linodeid
+- planid
+
+Optional Parameters:
+
+- paymentterm
 
 ### linode\_update
 
@@ -226,34 +235,9 @@ Optional Parameters:
 - ms\_ssh\_user
 - watchdog
 
-### linode\_resize
+### linode\_webconsoletoken
 
 Required Parameters:
-
-- linodeid
-- planid
-
-### linode\_mutate
-
-Required Parameters:
-
-- linodeid
-
-### linode\_clone
-
-Required Parameters:
-
-- datacenterid
-- linodeid
-- planid
-
-Optional Parameters:
-
-- paymentterm
-
-### linode\_list
-
-Optional Parameters:
 
 - linodeid
 
@@ -266,6 +250,22 @@ Required Parameters:
 Optional Parameters:
 
 - configid
+
+### linode\_shutdown
+
+Required Parameters:
+
+- linodeid
+
+### linode\_delete
+
+Required Parameters:
+
+- linodeid
+
+Optional Parameters:
+
+- skipchecks
 
 ### linode\_config\_delete
 
@@ -329,6 +329,19 @@ Optional Parameters:
 
 - configid
 
+### linode\_disk\_createfromimage
+
+Required Parameters:
+
+- imageid
+- linodeid
+
+Optional Parameters:
+
+- rootpass
+- rootsshkey
+- size
+
 ### linode\_disk\_duplicate
 
 Required Parameters:
@@ -336,51 +349,16 @@ Required Parameters:
 - diskid
 - linodeid
 
-### linode\_disk\_createfromdistribution
+### linode\_disk\_update
 
 Required Parameters:
-
-- distributionid
-- label
-- linodeid
-- rootpass
-- size
-
-Optional Parameters:
-
-- rootsshkey
-
-### linode\_disk\_list
-
-Required Parameters:
-
-- linodeid
-
-Optional Parameters:
 
 - diskid
 
-### linode\_disk\_create
-
-Required Parameters:
-
-- label
-- linodeid
-- size
-- type
-
 Optional Parameters:
 
-- fromdistributionid
 - isreadonly
-- rootpass
-- rootsshkey
-
-### linode\_disk\_delete
-
-Required Parameters:
-
-- diskid
+- label
 - linodeid
 
 ### linode\_disk\_createfromstackscript
@@ -399,6 +377,25 @@ Optional Parameters:
 
 - rootsshkey
 
+### linode\_disk\_imagize
+
+Required Parameters:
+
+- diskid
+- linodeid
+
+Optional Parameters:
+
+- description
+- label
+
+### linode\_disk\_delete
+
+Required Parameters:
+
+- diskid
+- linodeid
+
 ### linode\_disk\_resize
 
 Required Parameters:
@@ -407,23 +404,45 @@ Required Parameters:
 - linodeid
 - size
 
-### linode\_disk\_update
+### linode\_disk\_list
 
 Required Parameters:
 
-- diskid
+- linodeid
 
 Optional Parameters:
 
-- isreadonly
-- label
-- linodeid
+- diskid
 
-### linode\_ip\_addpublic
+### linode\_disk\_createfromdistribution
 
 Required Parameters:
 
+- distributionid
+- label
 - linodeid
+- rootpass
+- size
+
+Optional Parameters:
+
+- rootsshkey
+
+### linode\_disk\_create
+
+Required Parameters:
+
+- label
+- linodeid
+- size
+- type
+
+Optional Parameters:
+
+- fromdistributionid
+- isreadonly
+- rootpass
+- rootsshkey
 
 ### linode\_ip\_setrdns
 
@@ -431,6 +450,17 @@ Required Parameters:
 
 - hostname
 - ipaddressid
+
+### linode\_ip\_swap
+
+Required Parameters:
+
+- ipaddressid
+
+Optional Parameters:
+
+- tolinodeid
+- withipaddressid
 
 ### linode\_ip\_addprivate
 
@@ -448,16 +478,11 @@ Optional Parameters:
 
 - ipaddressid
 
-### linode\_ip\_swap
+### linode\_ip\_addpublic
 
 Required Parameters:
 
-- ipaddressid
-
-Optional Parameters:
-
-- tolinodeid
-- withipaddressid
+- linodeid
 
 ### linode\_job\_list
 
@@ -469,6 +494,12 @@ Optional Parameters:
 
 - jobid
 - pendingonly
+
+### stackscript\_list
+
+Optional Parameters:
+
+- stackscriptid
 
 ### stackscript\_update
 
@@ -484,12 +515,6 @@ Optional Parameters:
 - label
 - rev\_note
 - script
-
-### stackscript\_list
-
-Optional Parameters:
-
-- stackscriptid
 
 ### stackscript\_create
 
@@ -539,16 +564,6 @@ Optional Parameters:
 - ssl\_key
 - stickiness
 
-### nodebalancer\_config\_list
-
-Required Parameters:
-
-- nodebalancerid
-
-Optional Parameters:
-
-- configid
-
 ### nodebalancer\_config\_update
 
 Required Parameters:
@@ -570,11 +585,15 @@ Optional Parameters:
 - ssl\_key
 - stickiness
 
-### nodebalancer\_node\_delete
+### nodebalancer\_config\_list
 
 Required Parameters:
 
-- nodeid
+- nodebalancerid
+
+Optional Parameters:
+
+- configid
 
 ### nodebalancer\_node\_create
 
@@ -589,6 +608,22 @@ Optional Parameters:
 - mode
 - weight
 
+### nodebalancer\_node\_delete
+
+Required Parameters:
+
+- nodeid
+
+### nodebalancer\_node\_list
+
+Required Parameters:
+
+- configid
+
+Optional Parameters:
+
+- nodeid
+
 ### nodebalancer\_node\_update
 
 Required Parameters:
@@ -601,16 +636,6 @@ Optional Parameters:
 - label
 - mode
 - weight
-
-### nodebalancer\_node\_list
-
-Required Parameters:
-
-- configid
-
-Optional Parameters:
-
-- nodeid
 
 ### user\_getapikey
 
@@ -632,7 +657,7 @@ Optional Parameters:
 
 # COPYRIGHT & LICENSE
 
-Copyright 2008-2009 Linode, LLC, all rights reserved.
+Copyright 2008-2014 Michael Greb, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+
+0.22  2014-07-24 10:13:47 EDT
     - support for the Linode Images service, currently in beta
       see <https://forum.linode.com/viewtopic.php?f=26&t=11180>
 
