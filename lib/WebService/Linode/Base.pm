@@ -73,23 +73,9 @@ sub parse_response {
     my $response = shift;
 
     if ( $response->content =~ m|ERRORARRAY|i ) {
+        $self->_debug(10, "Received response: " . $response->content );
         my $json = from_json( $response->content );
-        if (scalar( @{ $json->{ERRORARRAY} } ) == 0
-            || ( scalar( @{ $json->{ERRORARRAY} } ) == 1
-                && $json->{ERRORARRAY}->[0]->{ERRORCODE} == 0 ) )
-        {   return $json->{DATA};
-        }
-        else {
-            # TODO this only returns the first error from the API
-
-            my $msg
-                = "API Error "
-                . $json->{ERRORARRAY}->[0]->{ERRORCODE} . ": "
-                . $json->{ERRORARRAY}->[0]->{ERRORMESSAGE};
-
-            $self->_error( $json->{ERRORARRAY}->[0]->{ERRORCODE}, $msg );
-            return;
-        }
+        return $self->_parse_api_response_data( $json );
     }
     elsif ( $response->status_line ) {
         $self->_error( -1, $response->status_line );
@@ -99,6 +85,28 @@ sub parse_response {
         $self->_error( -1, 'No JSON found' );
         return;
     }
+}
+
+sub _parse_api_response_data {
+    my $self = shift;
+    my $rdata = shift;
+
+    my $errors = $rdata->{ERRORARRAY};
+    if ( not $errors or ref $errors ne 'ARRAY' ) {
+        $self->_error( -1, 'Invalid response: ERRORARRAY missing or invalid' );
+        return;
+    }
+
+    return $rdata->{DATA} if @$errors == 0;
+    return $rdata->{DATA} if @$errors == 1 and $errors->[0]{ERRORCODE} == 0;
+
+    # If we've reached here, there's an error to report
+
+    # TODO this only returns the first error from the API
+    my $error = $rdata->{ERRORARRAY}->[0];
+    my $msg = "API Error $error->{ERRORCODE}: $error->{ERRORMESSAGE}";
+    $self->_error( $error->{ERRORCODE}, $msg );
+    return;
 }
 
 sub _lc_keys {
