@@ -38,6 +38,9 @@ sub new {
     $self->{_ua}->agent("WebService::Linode::Base/$WebService::Linode::Base::VERSION ");
     $self->{_ua}->agent($args{useragent}) if $args{useragent};
 
+    # set up storage for queued requests
+    $self->{_batch_queue} = [];
+
     bless $self, $package;
     return $self;
 }
@@ -68,6 +71,42 @@ sub send_request {
     return $self->{_ua}->post( $self->{_apiurl}, content => { %args } );
 }
 
+sub queue_request {
+    my ($self, %args) = @_;
+    my $queue = $self->{_batch_queue};
+
+    $self->_debug(10, "Queueing request for batch: " . join(' ' , %args));
+    push @$queue, \%args;
+
+    # return current number of items in the queue
+    return scalar @$queue;
+}
+
+sub list_queue {
+    my $self = shift;
+    my $queue = $self->{_batch_queue};
+    return @$queue;
+}
+
+sub clear_queue {
+    my $self = shift;
+    my $queue = $self->{_batch_queue};
+    @$queue = ();
+    return @$queue;
+}
+
+sub process_queue {
+    my ($self,$maxitems) = @_;
+    my $queue = $self->{_batch_queue};
+    # Default to processing the entire queue, cap at queue length
+    $maxitems = @$queue if not defined $maxitems or $maxitems > @$queue;
+
+    my @todo = splice @$queue, 0, $maxitems;
+    my $batch_json = to_json( \@todo );
+
+    return $self->do_request( api_action=>'batch', api_requestArray=>$batch_json );
+}
+
 sub parse_response {
     my $self = shift;
     my $response = shift;
@@ -75,7 +114,12 @@ sub parse_response {
     if ( $response->content =~ m|ERRORARRAY|i ) {
         $self->_debug(10, "Received response: " . $response->content );
         my $json = from_json( $response->content );
-        return $self->_parse_api_response_data( $json );
+        if ( ref $json eq 'ARRAY' ) {
+            return map { $self->_parse_api_response_data( $_ ) } @$json;
+        }
+        else {
+            return $self->_parse_api_response_data( $json );
+        }
     }
     elsif ( $response->status_line ) {
         $self->_error( -1, $response->status_line );
@@ -101,7 +145,6 @@ sub _parse_api_response_data {
     return $rdata->{DATA} if @$errors == 1 and $errors->[0]{ERRORCODE} == 0;
 
     # If we've reached here, there's an error to report
-
     # TODO this only returns the first error from the API
     my $error = $rdata->{ERRORARRAY}->[0];
     my $msg = "API Error $error->{ERRORCODE}: $error->{ERRORMESSAGE}";
@@ -186,6 +229,25 @@ response returning just the DATA section.
 
 Executes the send_request method, parses the response with the parse_response
 method and returns the data.
+
+=head2 queue_request
+
+Takes same arguments as send_request, but queues the request to be handled by
+a single batch request later.
+
+=head2 list_queue
+
+Returns list of queued requests.
+
+=head2 clear_queue
+
+Clears batch request queue.
+
+=head2 process_queue
+
+Sends queued items in a batch request.  Takes an optional number of items to
+send in the batch request, defaulting to all queued requests.  Returns an api
+reponse for each batch item.
 
 =head2 apikey
 
