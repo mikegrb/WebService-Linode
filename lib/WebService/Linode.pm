@@ -172,7 +172,18 @@ sub send_queued_requests {
         return;
     }
 
-    return map { [map { $self->_lc_keys($_) } @$_] } $self->process_queue( $items );
+    my @responses;
+    for my $data ( $self->process_queue( $items ) ) {
+        if ( ref $data eq 'ARRAY' ) {
+            push @responses, [ map { $self->_lc_keys($_) } @$data ];
+        } elsif( ref $data eq 'HASH' ) {
+            push @responses, $self->_lc_keys($data);
+        } else {
+            push @responses, $data;
+        }
+    }
+
+    return @responses;
 }
 
 'mmm, cake';
