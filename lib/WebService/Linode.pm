@@ -1377,9 +1377,9 @@ Optional Parameters:
 
 =over
 
-=item * Michael Greb, C<< <mgreb@linode.com> >>
+=item * Michael Greb, C<< <michael@thegrebs.com> >>
 
-=item * Stan "The Man" Schwertly C<< <stan@linode.com> >>
+=item * Stan "The Man" Schwertly C<< <stan@schwertly.com> >>
 
 =back
 
