@@ -18,6 +18,24 @@ same.  For additional information see [http://www.linode.com/api/](http://www.li
 For documentation of possible arguments to the constructor, see
 [WebService::Linode::Base](https://metacpan.org/pod/WebService::Linode::Base).
 
+# Batch requests
+
+Each of the Linode API methods below may optionally be prefixed with QUEUE\_
+to add that request to a queue to be processed later in one or more batch
+requests which can be processed by calling send\_queued\_requests.
+For example:
+
+    my @linode_ids = () # Get your linode ids through normal methods
+    my @responses = map { $api->linode_ip_list( linodeid=>$_ ) } @linode_ids;
+
+Can be reduced to a single request:
+
+    my @linode_ids = () # Get your linode ids through normal methods
+    $api->QUEUE_linode_ip_list( linodeid=>$_ ) for @linode_ids;
+    my @responses = $api->send_queued_requests; # One api request
+
+See [WebService::Linode::Base](https://metacpan.org/pod/WebService::Linode::Base) for additional queue management methods.
+
 # Methods from the Linode API
 
 ### avail\_datacenters
@@ -652,8 +670,8 @@ Optional Parameters:
 
 # AUTHORS
 
-- Michael Greb, `<mgreb@linode.com>`
-- Stan "The Man" Schwertly `<stan@linode.com>`
+- Michael Greb, `<michael@thegrebs.com>`
+- Stan "The Man" Schwertly `<stan@schwertly.com>`
 
 # COPYRIGHT & LICENSE
 

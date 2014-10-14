@@ -4,7 +4,7 @@
       "=over"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Milla version v1.0.5, Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.141520",
+   "generated_by" : "Dist::Milla version v1.0.8, Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.142690",
    "license" : [
       "perl_5"
    ],
@@ -26,12 +26,13 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build::Tiny" : "0.036"
+            "Module::Build::Tiny" : "0.038"
          }
       },
       "develop" : {
          "requires" : {
-            "Test::Kwalitee" : "1.12",
+            "Dist::Milla" : "v1.0.8",
+            "Test::Kwalitee" : "1.21",
             "Test::Pod" : "1.41"
          }
       },
@@ -61,11 +62,12 @@
          "web" : "https://github.com/mikegrb/WebService-Linode"
       }
    },
-   "version" : "0.22",
+   "version" : "0.23",
    "x_contributors" : [
+      "Kevan Benson <kentrak@gmail.com>",
+      "Mike Greb <mikegrb@cpan.org>",
       "Neil Bowers <neil@bowers.com>",
       "Stan Schwertly <stan@schwertly.com>",
-      "mikegrb <michael@thegrebs.com>",
       "trevorparker <trevor@trevorparker.com>"
    ]
 }
