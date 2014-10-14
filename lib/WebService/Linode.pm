@@ -212,7 +212,7 @@ L<WebService::Linode::Base>.
 =head1 Batch requests
 
 Each of the Linode API methods below may optionally be prefixed with QUEUE_
-to att that request to a queue to be processed later in one or more batch
+to add that request to a queue to be processed later in one or more batch
 requests which can be processed by calling send_queued_requests.
 For example:
 

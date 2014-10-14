@@ -1,6 +1,7 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - Batched API request support by Kevan Benson <kbenson@cpan.org>
 
 0.22  2014-07-24 10:13:47 EDT
     - support for the Linode Images service, currently in beta
