@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+
+0.24  2014-10-18 22:43:33 EDT
     - add explicit section to POD for send_queued_requests
     - Add Test::Pod::Coverage to cpanfile for develop
 

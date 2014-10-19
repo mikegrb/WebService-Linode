@@ -36,6 +36,10 @@ Can be reduced to a single request:
 
 See [WebService::Linode::Base](https://metacpan.org/pod/WebService::Linode::Base) for additional queue management methods.
 
+### send\_queued\_requests
+
+Send queued batch requests, returns list of responses.
+
 # Methods from the Linode API
 
 ### avail\_datacenters
