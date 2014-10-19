@@ -227,6 +227,10 @@ Can be reduced to a single request:
 
 See L<WebService::Linode::Base> for additional queue management methods.
 
+=head3 send_queued_requests
+
+Send queued batch requests, returns list of responses.
+
 =head1 Methods from the Linode API
 
 =head3 avail_datacenters

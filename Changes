@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - add explicit section to POD for send_queued_requests
+    - Add Test::Pod::Coverage to cpanfile for develop
 
 0.23  2014-10-14 16:31:36 EDT
     - Batched API request support by Kevan Benson <kbenson@cpan.org>
