@@ -61,10 +61,10 @@ my %validation = (
         webconsoletoken => [ [ 'linodeid' ], [] ],
     },
     linode_config => {
-        create => [ [qw( kernelid label linodeid )], [qw( comments devtmpfs_automount disklist helper_depmod helper_disableupdatedb helper_xen ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
+        create => [ [qw( kernelid label linodeid )], [qw( comments devtmpfs_automount disklist helper_depmod helper_disableupdatedb helper_network helper_xen ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
         delete => [ [ 'configid', 'linodeid' ], [] ],
         list => [ [ 'linodeid' ], [ 'configid' ] ],
-        update => [ [ 'configid' ], [qw( comments devtmpfs_automount disklist helper_depmod helper_disableupdatedb helper_xen kernelid label linodeid ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
+        update => [ [ 'configid' ], [qw( comments devtmpfs_automount disklist helper_depmod helper_disableupdatedb helper_network helper_xen kernelid label linodeid ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
     },
     linode_disk => {
         create => [ [qw( label linodeid size type )], [qw( fromdistributionid isreadonly rootpass rootsshkey )] ],
@@ -717,6 +717,8 @@ Optional Parameters:
 
 =item * helper_disableupdatedb
 
+=item * helper_network
+
 =item * helper_xen
 
 =item * ramlimit
@@ -754,6 +756,8 @@ Optional Parameters:
 =item * helper_depmod
 
 =item * helper_disableupdatedb
+
+=item * helper_network
 
 =item * helper_xen
 
