@@ -69,7 +69,7 @@ my %validation = (
     linode_disk => {
         create => [ [qw( label linodeid size type )], [qw( fromdistributionid isreadonly rootpass rootsshkey )] ],
         createfromdistribution => [ [qw( distributionid label linodeid rootpass size )], [ 'rootsshkey' ] ],
-        createfromimage => [ [ 'imageid', 'linodeid' ], [qw( rootpass rootsshkey size )] ],
+        createfromimage => [ [ 'imageid', 'linodeid' ], [qw( label rootpass rootsshkey size )] ],
         createfromstackscript => [ [qw( distributionid label linodeid rootpass size stackscriptid stackscriptudfresponses )], [ 'rootsshkey' ] ],
         delete => [ [ 'diskid', 'linodeid' ], [] ],
         duplicate => [ [ 'diskid', 'linodeid' ], [] ],
@@ -809,6 +809,8 @@ Optional Parameters:
 
 =over 4
 
+=item * label
+
 =item * rootpass
 
 =item * rootsshkey
@@ -1090,6 +1092,28 @@ Optional Parameters:
 =item * jobid
 
 =item * pendingonly
+
+=back
+
+=head3 image_delete
+
+Required Parameters:
+
+=over 4
+
+=item * imageid
+
+=back
+
+=head3 image_list
+
+Optional Parameters:
+
+=over 4
+
+=item * imageid
+
+=item * pending
 
 =back
 
