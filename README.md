@@ -311,6 +311,7 @@ Optional Parameters:
 - disklist
 - helper\_depmod
 - helper\_disableupdatedb
+- helper\_network
 - helper\_xen
 - ramlimit
 - rootdevicecustom
@@ -331,6 +332,7 @@ Optional Parameters:
 - disklist
 - helper\_depmod
 - helper\_disableupdatedb
+- helper\_network
 - helper\_xen
 - kernelid
 - label
@@ -529,7 +531,6 @@ Required Parameters:
 Optional Parameters:
 
 - imageid
-
 - pending
 
 ### stackscript\_list

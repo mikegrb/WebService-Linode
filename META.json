@@ -4,7 +4,7 @@
       "=over"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Milla version v1.0.8, Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.142690",
+   "generated_by" : "Dist::Milla version v1.0.8, Dist::Zilla version 5.021, CPAN::Meta::Converter version 2.142690",
    "license" : [
       "perl_5"
    ],
@@ -12,7 +12,7 @@
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
       "version" : "2"
    },
-   "name" : "WebService-Linode",
+   "name" : "webservice-linode",
    "no_index" : {
       "directory" : [
          "t",
@@ -26,7 +26,7 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "Module::Build::Tiny" : "0.038"
+            "Module::Build::Tiny" : "0.039"
          }
       },
       "develop" : {
@@ -63,8 +63,9 @@
          "web" : "https://github.com/mikegrb/WebService-Linode"
       }
    },
-   "version" : "0.24",
+   "version" : "0.25",
    "x_contributors" : [
+      "James Ottinger <jottinger@linode.com>",
       "Kevan Benson <kentrak@gmail.com>",
       "Mike Greb <mikegrb@cpan.org>",
       "Neil Bowers <neil@bowers.com>",

@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+
+0.25  2014-12-10 12:52:40 PST
     - Patch from James Ottinger for additional Linode Images support a89bfc
     - support for network helper in linode_config_create & linode_config_update
       see <https://forum.linode.com/viewtopic.php?f=26&t=11469>
