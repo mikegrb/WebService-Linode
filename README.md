@@ -360,6 +360,7 @@ Required Parameters:
 
 Optional Parameters:
 
+- label
 - rootpass
 - rootsshkey
 - size
@@ -516,6 +517,20 @@ Optional Parameters:
 
 - jobid
 - pendingonly
+
+### image\_delete
+
+Required Parameters:
+
+- imageid
+
+### image\_list
+
+Optional Parameters:
+
+- imageid
+
+- pending
 
 ### stackscript\_list
 
