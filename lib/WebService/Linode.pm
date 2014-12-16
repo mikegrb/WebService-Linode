@@ -46,6 +46,7 @@ my %validation = (
     image => {
         delete => [ [ 'imageid' ], [] ],
         list => [ [], [ 'imageid', 'pending' ] ],
+        update => [ [ 'imageid' ], [ 'label', 'description' ] ],
     },
     linode => {
         boot => [ [ 'linodeid' ], [ 'configid' ] ],
@@ -1118,6 +1119,26 @@ Optional Parameters:
 =item * imageid
 
 =item * pending
+
+=back
+
+=head3 image_update
+
+Required Parameters:
+
+=over 4
+
+=item * imageid
+
+=back
+
+Optional Parameters:
+
+=over 4
+
+=item * label
+
+=item * description
 
 =back
 

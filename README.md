@@ -533,6 +533,17 @@ Optional Parameters:
 - imageid
 - pending
 
+### image\_update
+
+Required Parameters:
+
+- imageid
+
+Optional Parameters:
+
+- label
+- description
+
 ### stackscript\_list
 
 Optional Parameters:
