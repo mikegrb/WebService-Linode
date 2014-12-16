@@ -1,6 +1,7 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+    - Patch from James Ottinger for image_update method 74816d
 
 0.25  2014-12-10 12:52:40 PST
     - Patch from James Ottinger for additional Linode Images support a89bfc
