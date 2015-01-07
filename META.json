@@ -12,7 +12,7 @@
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
       "version" : "2"
    },
-   "name" : "webservice-linode",
+   "name" : "WebService-Linode",
    "no_index" : {
       "directory" : [
          "t",
@@ -63,7 +63,7 @@
          "web" : "https://github.com/mikegrb/WebService-Linode"
       }
    },
-   "version" : "0.25",
+   "version" : "0.26",
    "x_contributors" : [
       "James Ottinger <jottinger@linode.com>",
       "Kevan Benson <kentrak@gmail.com>",
