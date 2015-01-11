@@ -13,7 +13,7 @@ our $VERSION = '0.26';
 our @ISA     = ("WebService::Linode::Base");
 our $AUTOLOAD;
 
-my %validation = (
+my $validation = {
     account => {
         estimateinvoice => [ [ 'mode' ], [qw( linodeid paymentterm planid )] ],
         info => [ [], [] ],
@@ -119,18 +119,18 @@ my %validation = (
     user => {
         getapikey => [ [ 'password', 'username' ], [qw( expires label token )] ],
     },
-);
+};
 
 sub AUTOLOAD {
     ( my $name = $AUTOLOAD ) =~ s/.+:://;
     return if $name eq 'DESTROY';
     if ( $name =~ m/^(QUEUE_)?(.*?)_([^_]+)$/ ) {
         my ( $queue, $thing, $action ) = ( $1, $2, $3 );
-        if ( exists $validation{$thing} && exists $validation{$thing}{$action} )
+        if ( exists $validation->{$thing} && exists $validation->{$thing}{$action} )
         {   no strict 'refs';
             *{$AUTOLOAD} = sub {
                 my ( $self, %args ) = @_;
-                for my $req ( @{ $validation{$thing}{$action}[0] } ) {
+                for my $req ( @{ $validation->{$thing}{$action}[0] } ) {
                     if ( !exists $args{$req} ) {
                         carp
                             "Missing required argument $req for ${thing}_${action}";
@@ -139,8 +139,8 @@ sub AUTOLOAD {
                 }
                 for my $given ( keys %args ) {
                     if (!first { $_ eq $given }
-                        @{ $validation{$thing}{$action}[0] },
-                        @{ $validation{$thing}{$action}[1] } )
+                        @{ $validation->{$thing}{$action}[0] },
+                        @{ $validation->{$thing}{$action}[1] } )
                     {   carp "Unknown argument $given for ${thing}_${action}";
                         return;
                     }
