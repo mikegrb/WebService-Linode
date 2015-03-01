@@ -42,83 +42,154 @@ Send queued batch requests, returns list of responses.
 
 # Methods from the Linode API
 
-### avail\_datacenters
+## account Methods
 
-### avail\_nodebalancers
+### account\_estimateinvoice
 
-### avail\_distributions
+Estimates the invoice for adding a new Linode or NodeBalancer as well as resizing a Linode. This returns two fields: PRICE which is the estimated cost of the invoice, and INVOICE\_TO which is the date invoice would be though with timezone set to America/New\_York
 
-Optional Parameters:
+Required Parameters:
 
-- distributionid
+- mode
 
-### avail\_kernels
-
-Optional Parameters:
-
-- isxen
-- kernelid
-
-### avail\_linodeplans
+    This is one of the following options: 'linode\_new', 'linode\_resize', or 'nodebalancer\_new'.
 
 Optional Parameters:
 
 - planid
 
-### avail\_stackscripts
+    The desired PlanID available from avail.LinodePlans(). This is required for modes 'linode\_new' and 'linode\_resize'.
+
+- paymentterm
+
+    Subscription term in months. One of: 1, 12, or 24. This is required for modes 'linode\_new' and 'nodebalancer\_new'.
+
+- linodeid
+
+    This is the LinodeID you want to resize and is required for mode 'linode\_resize'.
+
+### account\_info
+
+Shows information about your account such as the date your account was opened as well as your network utilization for the current month in gigabytes.
+
+### account\_paybalance
+
+Pays current balance on file, returning it in the response.
+
+### account\_updatecard
+
+Required Parameters:
+
+- ccnumber
+- ccexpyear
+- ccexpmonth
+
+## avail Methods
+
+### avail\_datacenters
+
+Returns a list of Linode data center facilities.
+
+### avail\_distributions
+
+Returns a list of available Linux Distributions.
 
 Optional Parameters:
 
 - distributionid
-- distributionvendor
+
+    Limits the results to the specified DistributionID
+
+### avail\_kernels
+
+List available kernels.
+
+Optional Parameters:
+
+- isxen
+
+    Limits the results to show only Xen kernels
+
+- kernelid
+
+### avail\_linodeplans
+
+Returns a structure of Linode PlanIDs containing the Plan label and the availability in each Datacenter.
+
+Optional Parameters:
+
+- planid
+
+    Limits the list to the specified PlanID
+
+### avail\_nodebalancers
+
+Returns NodeBalancer pricing information.
+
+### avail\_stackscripts
+
+Returns a list of available public StackScripts.
+
+Optional Parameters:
+
 - keywords
 
-### domain\_list
+    Search terms
 
-Optional Parameters:
+- distributionid
 
-- domainid
+    Limit the results to StackScripts that can be applied to this DistributionID
 
-### domain\_update
+- distributionvendor
 
-Required Parameters:
+    Debian, Ubuntu, Fedora, etc.
 
-- domainid
-
-Optional Parameters:
-
-- axfr\_ips
-- description
-- domain
-- expire\_sec
-- lpm\_displaygroup
-- master\_ips
-- refresh\_sec
-- retry\_sec
-- soa\_email
-- status
-- ttl\_sec
-- type
+## domain Methods
 
 ### domain\_create
 
+Create a domain record.
+
 Required Parameters:
 
 - domain
+
+    The zone's name
+
 - type
+
+    master or slave
 
 Optional Parameters:
 
-- axfr\_ips
-- description
-- expire\_sec
-- lpm\_displaygroup
-- master\_ips
-- refresh\_sec
-- retry\_sec
 - soa\_email
+
+    Required when type=master
+
+- axfr\_ips
+
+    IP addresses allowed to AXFR the entire zone, semicolon separated
+
+- retry\_sec
+- description
+
+    Currently undisplayed.
+
 - status
+
+    0, 1, or 2 (disabled, active, edit mode)
+
 - ttl\_sec
+- expire\_sec
+- master\_ips
+
+    When type=slave, the zone's master DNS servers list, semicolon separated 
+
+- lpm\_displaygroup
+
+    Display group in the Domain list inside the Linode DNS Manager
+
+- refresh\_sec
 
 ### domain\_delete
 
@@ -126,22 +197,105 @@ Required Parameters:
 
 - domainid
 
-### domain\_resource\_update
+### domain\_list
 
-Required Parameters:
-
-- resourceid
+Lists domains you have access to.
 
 Optional Parameters:
 
 - domainid
-- name
-- port
-- priority
-- protocol
-- target
+
+    Limits the list to the specified DomainID
+
+### domain\_update
+
+Update a domain record.
+
+Required Parameters:
+
+- domainid
+
+Optional Parameters:
+
+- status
+
+    0, 1, or 2 (disabled, active, edit mode)
+
+- domain
+
+    The zone's name
+
 - ttl\_sec
+- expire\_sec
+- type
+
+    master or slave
+
+- soa\_email
+
+    Required when type=master
+
+- refresh\_sec
+- lpm\_displaygroup
+
+    Display group in the Domain list inside the Linode DNS Manager
+
+- master\_ips
+
+    When type=slave, the zone's master DNS servers list, semicolon separated 
+
+- axfr\_ips
+
+    IP addresses allowed to AXFR the entire zone, semicolon separated
+
+- retry\_sec
+- description
+
+    Currently undisplayed.
+
+## domain\_resource Methods
+
+### domain\_resource\_create
+
+Create a domain record.
+
+Required Parameters:
+
+- domainid
+- type
+
+    One of: NS, MX, A, AAAA, CNAME, TXT, or SRV
+
+Optional Parameters:
+
+- target
+
+    When Type=MX the hostname.  When Type=CNAME the target of the alias.  When Type=TXT the value of the record. When Type=A or AAAA the token of '\[remote\_addr\]' will be substituted with the IP address of the request.
+
+- ttl\_sec
+
+    TTL.  Leave as 0 to accept our default.
+
+- port
 - weight
+- priority
+
+    Priority for MX and SRV records, 0-255
+
+- protocol
+
+    The protocol to append to an SRV record.  Ignored on other record types.
+
+- name
+
+    The hostname or FQDN.  When Type=MX the subdomain to delegate to the Target MX server.
+
+### domain\_resource\_delete
+
+Required Parameters:
+
+- resourceid
+- domainid
 
 ### domain\_resource\_list
 
@@ -153,50 +307,44 @@ Optional Parameters:
 
 - resourceid
 
-### domain\_resource\_delete
+### domain\_resource\_update
+
+Update a domain record.
 
 Required Parameters:
 
-- domainid
 - resourceid
 
-### domain\_resource\_create
+Optional Parameters:
 
-Required Parameters:
+- target
+
+    When Type=MX the hostname.  When Type=CNAME the target of the alias.  When Type=TXT the value of the record. When Type=A or AAAA the token of '\[remote\_addr\]' will be substituted with the IP address of the request.
 
 - domainid
-- type
+- ttl\_sec
 
-Optional Parameters:
+    TTL.  Leave as 0 to accept our default.
+
+- port
+- weight
+- protocol
+
+    The protocol to append to an SRV record.  Ignored on other record types.
+
+- priority
+
+    Priority for MX and SRV records, 0-255
 
 - name
-- port
-- priority
-- protocol
-- target
-- ttl\_sec
-- weight
 
-### linode\_resize
+    The hostname or FQDN.  When Type=MX the subdomain to delegate to the Target MX server.
 
-Required Parameters:
-
-- linodeid
-- planid
-
-### linode\_list
-
-Optional Parameters:
-
-- linodeid
-
-### linode\_mutate
-
-Required Parameters:
-
-- linodeid
+## linode Methods
 
 ### linode\_boot
+
+Issues a boot job for the provided ConfigID.  If no ConfigID is provided boots the last used configuration profile, or the first configuration profile if this Linode has never been booted.
 
 Required Parameters:
 
@@ -206,58 +354,81 @@ Optional Parameters:
 
 - configid
 
-### linode\_create
-
-Required Parameters:
-
-- datacenterid
-- planid
-
-Optional Parameters:
-
-- paymentterm
+    The ConfigID to boot, available from linode.config.list().
 
 ### linode\_clone
 
+Creates a new Linode, assigns you full privileges, and then clones the specified LinodeID to the new Linode. There is a limit of 5 active clone operations per source Linode.  It is recommended that the source Linode be powered down during the clone.
+
 Required Parameters:
 
-- datacenterid
-- linodeid
 - planid
+
+    The desired PlanID available from avail.LinodePlans()
+
+- linodeid
+
+    The LinodeID that you want cloned
+
+- datacenterid
+
+    The DatacenterID from avail.datacenters() where you wish to place this new Linode
 
 Optional Parameters:
 
 - paymentterm
 
-### linode\_update
+    Subscription term in months for prepaid customers.  One of: 1, 12, or 24
+
+### linode\_create
+
+Creates a Linode and assigns you full privileges. There is a 75-linodes-per-hour limiter.
+
+Required Parameters:
+
+- planid
+
+    The desired PlanID available from avail.LinodePlans()
+
+- datacenterid
+
+    The DatacenterID from avail.datacenters() where you wish to place this new Linode
+
+Optional Parameters:
+
+- paymentterm
+
+    Subscription term in months for prepaid customers.  One of: 1, 12, or 24
+
+### linode\_delete
+
+Immediately removes a Linode from your account and issues a pro-rated credit back to your account, if applicable.  To prevent accidental deletes, this requires the Linode has no Disk images.  You must first delete its disk images."
 
 Required Parameters:
 
 - linodeid
 
+    The LinodeID to delete
+
 Optional Parameters:
 
-- alert\_bwin\_enabled
-- alert\_bwin\_threshold
-- alert\_bwout\_enabled
-- alert\_bwout\_threshold
-- alert\_bwquota\_enabled
-- alert\_bwquota\_threshold
-- alert\_cpu\_enabled
-- alert\_cpu\_threshold
-- alert\_diskio\_enabled
-- alert\_diskio\_threshold
-- backupweeklyday
-- backupwindow
-- label
-- lpm\_displaygroup
-- ms\_ssh\_disabled
-- ms\_ssh\_ip
-- ms\_ssh\_port
-- ms\_ssh\_user
-- watchdog
+- skipchecks
 
-### linode\_webconsoletoken
+    Skips the safety checks and will always delete the Linode
+
+### linode\_list
+
+Returns a list of all Linodes user has access or delete to, including some properties.  Status values are -1: Being Created, 0: Brand New, 1: Running, and 2: Powered Off.
+
+Optional Parameters:
+
+- linodeid
+
+    Limits the list to the specified LinodeID
+
+### linode\_mutate
+
+Upgrades a Linode to its next generation.
 
 Required Parameters:
 
@@ -265,6 +436,8 @@ Required Parameters:
 
 ### linode\_reboot
 
+Issues a shutdown, and then boot job for a given LinodeID.
+
 Required Parameters:
 
 - linodeid
@@ -272,14 +445,30 @@ Required Parameters:
 Optional Parameters:
 
 - configid
+
+### linode\_resize
+
+Resizes a Linode from one plan to another.  Immediately shuts the Linode down, charges/credits the account, and issue a migration to another host server.
+
+Required Parameters:
+
+- planid
+
+    The desired PlanID available from avail.LinodePlans()
+
+- linodeid
 
 ### linode\_shutdown
 
+Issues a shutdown job for a given LinodeID.
+
 Required Parameters:
 
 - linodeid
 
-### linode\_delete
+### linode\_update
+
+Updates a Linode's properties.
 
 Required Parameters:
 
@@ -287,64 +476,152 @@ Required Parameters:
 
 Optional Parameters:
 
-- skipchecks
+- alert\_bwquota\_threshold
 
-### linode\_config\_delete
+    Percentage of monthly bw quota
+
+- alert\_bwin\_threshold
+
+    Mb/sec
+
+- alert\_cpu\_threshold
+
+    CPU Alert threshold, percentage 0-800
+
+- label
+
+    This Linode's label
+
+- ms\_ssh\_port
+- lpm\_displaygroup
+
+    Display group in the Linode list inside the Linode Manager
+
+- alert\_bwin\_enabled
+
+    Enable the incoming bandwidth email alert
+
+- ms\_ssh\_disabled
+- backupwindow
+- alert\_cpu\_enabled
+
+    Enable the cpu usage email alert
+
+- backupweeklyday
+- alert\_diskio\_enabled
+
+    Enable the disk IO email alert
+
+- ms\_ssh\_ip
+- alert\_bwquota\_enabled
+
+    Enable the bw quote email alert
+
+- ms\_ssh\_user
+- watchdog
+
+    Enable the Lassie shutdown watchdog
+
+- alert\_bwout\_enabled
+
+    Enable the outgoing bandwidth email alert
+
+- alert\_bwout\_threshold
+
+    Mb/sec
+
+- alert\_diskio\_threshold
+
+    IO ops/sec
+
+### linode\_webconsoletoken
+
+Generates a console token starting a web console LISH session for the requesting IP
 
 Required Parameters:
 
-- configid
 - linodeid
+
+## linode\_config Methods
 
 ### linode\_config\_create
 
+Creates a Linode Configuration Profile.
+
 Required Parameters:
 
-- kernelid
-- label
 - linodeid
+- label
+
+    The Label for this profile
+
+- disklist
+
+    A comma delimited list of DiskIDs; position reflects device node.  The 9th element for specifying the initrd.
+
+- kernelid
+
+    The KernelID for this profile.  Found in avail.kernels()
 
 Optional Parameters:
 
 - comments
-- devtmpfs\_automount
-- disklist
-- helper\_depmod
-- helper\_disableupdatedb
-- helper\_network
+
+    Comments you wish to save along with this profile
+
 - helper\_xen
-- ramlimit
+
+    Enable the Xen filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
+
+- devtmpfs\_automount
+
+    Controls if pv\_ops kernels should automount devtmpfs at boot. 
+
 - rootdevicecustom
-- rootdevicenum
+
+    A custom root device setting.
+
 - rootdevicero
+
+    Enables the 'ro' kernel flag.  Modern distros want this. 
+
+- helper\_depmod
+
+    Creates an empty modprobe file for the kernel you're booting. 
+
+- helper\_disableupdatedb
+
+    Enable the disableUpdateDB filesystem helper
+
+- helper\_network
+
+    Automatically creates network configuration files for your distro and places them into your filesystem.
+
+- rootdevicenum
+
+    Which device number (1-8) that contains the root partition.  0 to utilize RootDeviceCustom.
+
 - runlevel
 
-### linode\_config\_update
+    One of 'default', 'single', 'binbash' 
+
+- ramlimit
+
+    RAMLimit in MB.  0 for max.
+
+### linode\_config\_delete
+
+Deletes a Linode Configuration Profile.
 
 Required Parameters:
 
 - configid
-
-Optional Parameters:
-
-- comments
-- devtmpfs\_automount
-- disklist
-- helper\_depmod
-- helper\_disableupdatedb
-- helper\_network
-- helper\_xen
-- kernelid
-- label
 - linodeid
-- ramlimit
-- rootdevicecustom
-- rootdevicenum
-- rootdevicero
-- runlevel
 
 ### linode\_config\_list
 
+Lists a Linode's Configuration Profiles.
+
 Required Parameters:
 
 - linodeid
@@ -353,66 +630,194 @@ Optional Parameters:
 
 - configid
 
+### linode\_config\_update
+
+Updates a Linode Configuration Profile.
+
+Required Parameters:
+
+- configid
+
+Optional Parameters:
+
+- comments
+
+    Comments you wish to save along with this profile
+
+- linodeid
+- rootdevicero
+
+    Enables the 'ro' kernel flag.  Modern distros want this. 
+
+- label
+
+    The Label for this profile
+
+- rootdevicenum
+
+    Which device number (1-8) that contains the root partition.  0 to utilize RootDeviceCustom.
+
+- disklist
+
+    A comma delimited list of DiskIDs; position reflects device node.  The 9th element for specifying the initrd.
+
+- kernelid
+
+    The KernelID for this profile.  Found in avail.kernels()
+
+- ramlimit
+
+    RAMLimit in MB.  0 for max.
+
+- helper\_xen
+
+    Enable the Xen filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
+
+- rootdevicecustom
+
+    A custom root device setting.
+
+- devtmpfs\_automount
+
+    Controls if pv\_ops kernels should automount devtmpfs at boot. 
+
+- helper\_network
+
+    Automatically creates network configuration files for your distro and places them into your filesystem.
+
+- helper\_disableupdatedb
+
+    Enable the disableUpdateDB filesystem helper
+
+- helper\_depmod
+
+    Creates an empty modprobe file for the kernel you're booting. 
+
+- runlevel
+
+    One of 'default', 'single', 'binbash' 
+
+## linode\_disk Methods
+
+### linode\_disk\_create
+
+Required Parameters:
+
+- linodeid
+- label
+
+    The display label for this Disk
+
+- type
+
+    The formatted type of this disk.  Valid types are: ext3, ext4, swap, raw
+
+- size
+
+    The size in MB of this Disk.
+
+Optional Parameters:
+
+- rootsshkey
+- fromdistributionid
+- rootpass
+- isreadonly
+
+    Enable forced read-only for this Disk
+
+### linode\_disk\_createfromdistribution
+
+Required Parameters:
+
+- size
+
+    Size of this disk image in MB
+
+- rootpass
+
+    The root user's password
+
+- linodeid
+- distributionid
+
+    The DistributionID to create this disk from.  Found in avail.distributions()
+
+- label
+
+    The label of this new disk image
+
+Optional Parameters:
+
+- rootsshkey
+
+    Optionally sets this string into /root/.ssh/authorized\_keys upon distribution configuration.
+
 ### linode\_disk\_createfromimage
+
+Creates a new disk from a previously imagized disk.
 
 Required Parameters:
 
 - imageid
+
+    The ID of the frozen image to deploy from
+
 - linodeid
+
+    Specifies the Linode to deploy on to
 
 Optional Parameters:
 
-- label
-- rootpass
 - rootsshkey
+
+    Optionally sets this string into /root/.ssh/authorized\_keys upon image deployment
+
+- rootpass
+
+    Optionally sets the root password at deployment time. If a password is not provided the existing root password of the frozen image will not be modified
+
+- label
+
+    The label of this new disk image
+
 - size
 
-### linode\_disk\_duplicate
-
-Required Parameters:
-
-- diskid
-- linodeid
-
-### linode\_disk\_update
-
-Required Parameters:
-
-- diskid
-
-Optional Parameters:
-
-- isreadonly
-- label
-- linodeid
+    The size of the disk image to creates. Defaults to the minimum size required for the requested image
 
 ### linode\_disk\_createfromstackscript
 
 Required Parameters:
 
-- distributionid
-- label
 - linodeid
-- rootpass
-- size
-- stackscriptid
 - stackscriptudfresponses
+
+    JSON encoded name/value pairs, answering this StackScript's User Defined Fields
+
+- label
+
+    The label of this new disk image
+
+- size
+
+    Size of this disk image in MB
+
+- distributionid
+
+    Which Distribution to apply this StackScript to.  Must be one from the script's DistributionIDList
+
+- rootpass
+
+    The root user's password
+
+- stackscriptid
+
+    The StackScript to create this image from
 
 Optional Parameters:
 
 - rootsshkey
 
-### linode\_disk\_imagize
-
-Required Parameters:
-
-- diskid
-- linodeid
-
-Optional Parameters:
-
-- description
-- label
+    Optionally sets this string into /root/.ssh/authorized\_keys upon distribution configuration.
 
 ### linode\_disk\_delete
 
@@ -420,6 +825,51 @@ Required Parameters:
 
 - diskid
 - linodeid
+
+### linode\_disk\_duplicate
+
+Performs a bit-for-bit copy of a disk image.
+
+Required Parameters:
+
+- diskid
+- linodeid
+
+### linode\_disk\_imagize
+
+Creates a gold-master image for future deployments
+
+Required Parameters:
+
+- diskid
+
+    Specifies the source Disk to create the image from
+
+- linodeid
+
+    Specifies the source Linode to create the image from
+
+Optional Parameters:
+
+- description
+
+    An optional description of the created image
+
+- label
+
+    Sets the name of the image shown in the base image list, defaults to the source image label
+
+### linode\_disk\_list
+
+Status values are 1: Ready and 2: Being Deleted.
+
+Required Parameters:
+
+- linodeid
+
+Optional Parameters:
+
+- diskid
 
 ### linode\_disk\_resize
 
@@ -429,85 +879,94 @@ Required Parameters:
 - linodeid
 - size
 
-### linode\_disk\_list
+    The requested new size of this Disk in MB
+
+### linode\_disk\_update
 
 Required Parameters:
-
-- linodeid
-
-Optional Parameters:
 
 - diskid
 
-### linode\_disk\_createfromdistribution
-
-Required Parameters:
-
-- distributionid
-- label
-- linodeid
-- rootpass
-- size
-
 Optional Parameters:
 
-- rootsshkey
-
-### linode\_disk\_create
-
-Required Parameters:
-
-- label
 - linodeid
-- size
-- type
-
-Optional Parameters:
-
-- fromdistributionid
 - isreadonly
-- rootpass
-- rootsshkey
+
+    Enable forced read-only for this Disk
+
+- label
+
+    The display label for this Disk
+
+## linode\_ip Methods
+
+### linode\_ip\_addprivate
+
+Assigns a Private IP to a Linode.  Returns the IPAddressID that was added.
+
+Required Parameters:
+
+- linodeid
+
+### linode\_ip\_addpublic
+
+Assigns a Public IP to a Linode.  Returns the IPAddressID and IPAddress that was added.
+
+Required Parameters:
+
+- linodeid
+
+    The LinodeID of the Linode that will be assigned an additional public IP address
+
+### linode\_ip\_list
+
+Returns the IP addresses of all Linodes you have access to.
+
+Optional Parameters:
+
+- linodeid
+
+    If specified, limits the result to this LinodeID
+
+- ipaddressid
+
+    If specified, limits the result to this IPAddressID
 
 ### linode\_ip\_setrdns
+
+Sets the rDNS name of a Public IP.  Returns the IPAddressID and IPAddress that were updated.
 
 Required Parameters:
 
 - hostname
+
+    The hostname to set the reverse DNS to
+
 - ipaddressid
 
+    The IPAddressID of the address to update
+
 ### linode\_ip\_swap
+
+Exchanges Public IP addresses between two Linodes within a Datacenter.  The destination of the IP Address can be designated by either the toLinodeID or withIPAddressID parameter.  Returns the resulting relationship of the Linode and IP Address parameters.  When performing a one directional swap, the source is represented by the first of the two resultant array members.
 
 Required Parameters:
 
 - ipaddressid
+
+    The IPAddressID of an IP Address to transfer or swap
 
 Optional Parameters:
 
 - tolinodeid
+
+    The LinodeID of the Linode where IPAddressID will be transfered
+
 - withipaddressid
 
-### linode\_ip\_addprivate
+    The IP Address ID to swap
 
-Required Parameters:
-
-- linodeid
-
-### linode\_ip\_list
-
-Required Parameters:
-
-- linodeid
-
-Optional Parameters:
-
-- ipaddressid
-
-### linode\_ip\_addpublic
-
-Required Parameters:
-
-- linodeid
+## linode\_job Methods
 
 ### linode\_job\_list
 
@@ -517,67 +976,38 @@ Required Parameters:
 
 Optional Parameters:
 
-- jobid
 - pendingonly
+- jobid
 
-### image\_delete
+    Limits the list to the specified JobID
 
-Required Parameters:
-
-- imageid
-
-### image\_list
-
-Optional Parameters:
-
-- imageid
-- pending
-
-### image\_update
-
-Required Parameters:
-
-- imageid
-
-Optional Parameters:
-
-- label
-- description
-
-### stackscript\_list
-
-Optional Parameters:
-
-- stackscriptid
-
-### stackscript\_update
-
-Required Parameters:
-
-- stackscriptid
-
-Optional Parameters:
-
-- description
-- distributionidlist
-- ispublic
-- label
-- rev\_note
-- script
+## stackscript Methods
 
 ### stackscript\_create
 
+Create a StackScript.
+
 Required Parameters:
 
-- distributionidlist
-- label
 - script
+
+    The actual script
+
+- distributionidlist
+
+    Comma delimited list of DistributionIDs that this script works on 
+
+- label
+
+    The Label for this StackScript
 
 Optional Parameters:
 
+- rev\_note
 - description
 - ispublic
-- rev\_note
+
+    Whether this StackScript is published in the Library, for everyone to use
 
 ### stackscript\_delete
 
@@ -585,12 +1015,47 @@ Required Parameters:
 
 - stackscriptid
 
-### nodebalancer\_config\_delete
+### stackscript\_list
+
+Lists StackScripts you have access to.
+
+Optional Parameters:
+
+- stackscriptid
+
+    Limits the list to the specified StackScriptID
+
+### stackscript\_update
+
+Update a StackScript.
 
 Required Parameters:
 
-- configid
-- nodebalancerid
+- stackscriptid
+
+Optional Parameters:
+
+- script
+
+    The actual script
+
+- rev\_note
+- ispublic
+
+    Whether this StackScript is published in the Library, for everyone to use
+
+- label
+
+    The Label for this StackScript
+
+- description
+- distributionidlist
+
+    Comma delimited list of DistributionIDs that this script works on 
+
+## nodeblancer Methods
+
+## nodebalancer\_config Methods
 
 ### nodebalancer\_config\_create
 
@@ -598,43 +1063,73 @@ Required Parameters:
 
 - nodebalancerid
 
+    The parent NodeBalancer's ID
+
 Optional Parameters:
 
-- algorithm
-- check
-- check\_attempts
-- check\_body
-- check\_interval
 - check\_path
-- check\_timeout
-- port
-- protocol
+
+    When check=http, the path to request
+
 - ssl\_cert
-- ssl\_key
+
+    SSL certificate served by the NodeBalancer when the protocol is 'https'
+
+- check\_body
+
+    When check=http\_body, a regex against the expected result body
+
 - stickiness
 
-### nodebalancer\_config\_update
+    Session persistence.  One of 'none', 'table', 'http\_cookie'
+
+- port
+
+    Port to bind to on the public interfaces. 1-65534
+
+- check\_timeout
+
+    Seconds to wait before considering the probe a failure. 1-30.  Must be less than check\_interval.
+
+- check
+
+    Perform active health checks on the backend nodes.  One of 'connection', 'http', 'http\_body'
+
+- ssl\_key
+
+    Unpassphrased private key for the SSL certificate when protocol is 'https'
+
+- check\_attempts
+
+    Number of failed probes before taking a node out of rotation. 1-30
+
+- check\_interval
+
+    Seconds between health check probes.  2-3600
+
+- protocol
+
+    Either 'tcp', 'http', or 'https'
+
+- algorithm
+
+    Balancing algorithm.  One of 'roundrobin', 'leastconn', 'source'
+
+### nodebalancer\_config\_delete
+
+Deletes a NodeBalancer's Config
 
 Required Parameters:
 
 - configid
 
-Optional Parameters:
+    The ConfigID to delete
 
-- algorithm
-- check
-- check\_attempts
-- check\_body
-- check\_interval
-- check\_path
-- check\_timeout
-- port
-- protocol
-- ssl\_cert
-- ssl\_key
-- stickiness
+- nodebalancerid
 
 ### nodebalancer\_config\_list
+
+Returns a list of NodeBalancers this user has access or delete to, including their properties
 
 Required Parameters:
 
@@ -644,26 +1139,107 @@ Optional Parameters:
 
 - configid
 
+    Limits the list to the specified ConfigID
+
+### nodebalancer\_config\_update
+
+Updates a Config's properties
+
+Required Parameters:
+
+- configid
+
+Optional Parameters:
+
+- check\_path
+
+    When check=http, the path to request
+
+- ssl\_cert
+
+    SSL certificate served by the NodeBalancer when the protocol is 'https'
+
+- check\_body
+
+    When check=http\_body, a regex against the expected result body
+
+- stickiness
+
+    Session persistence.  One of 'none', 'table', 'http\_cookie'
+
+- port
+
+    Port to bind to on the public interfaces. 1-65534
+
+- check\_timeout
+
+    Seconds to wait before considering the probe a failure. 1-30.  Must be less than check\_interval.
+
+- check
+
+    Perform active health checks on the backend nodes.  One of 'connection', 'http', 'http\_body'
+
+- ssl\_key
+
+    Unpassphrased private key for the SSL certificate when protocol is 'https'
+
+- check\_attempts
+
+    Number of failed probes before taking a node out of rotation. 1-30
+
+- check\_interval
+
+    Seconds between health check probes.  2-3600
+
+- protocol
+
+    Either 'tcp', 'http', or 'https'
+
+- algorithm
+
+    Balancing algorithm.  One of 'roundrobin', 'leastconn', 'source'
+
+## nodebalancer\_node Methods
+
 ### nodebalancer\_node\_create
 
 Required Parameters:
 
 - address
-- configid
+
+    The address:port combination used to communicate with this Node
+
 - label
+
+    This backend Node's label
+
+- configid
+
+    The parent ConfigID to attach this Node to
 
 Optional Parameters:
 
 - mode
+
+    The connections mode for this node.  One of 'accept', 'reject', or 'drain'
+
 - weight
 
+    Load balancing weight, 1-255. Higher means more connections.
+
 ### nodebalancer\_node\_delete
+
+Deletes a Node from a NodeBalancer Config
 
 Required Parameters:
 
 - nodeid
 
+    The NodeID to delete
+
 ### nodebalancer\_node\_list
+
+Returns a list of Nodes associated with a NodeBalancer Config
 
 Required Parameters:
 
@@ -673,7 +1249,11 @@ Optional Parameters:
 
 - nodeid
 
+    Limits the list to the specified NodeID
+
 ### nodebalancer\_node\_update
+
+Updates a Node's properties
 
 Required Parameters:
 
@@ -682,11 +1262,26 @@ Required Parameters:
 Optional Parameters:
 
 - address
-- label
+
+    The address:port combination used to communicate with this Node
+
 - mode
+
+    The connections mode for this node.  One of 'accept', 'reject', or 'drain'
+
 - weight
 
+    Load balancing weight, 1-255. Higher means more connections.
+
+- label
+
+    This backend Node's label
+
+## user Methods
+
 ### user\_getapikey
+
+Authenticates a Linode Manager user against their username, password, and two-factor token (when enabled), and then returns a new API key, which can be used until it expires.  The number of active keys is limited to 20.
 
 Required Parameters:
 
@@ -695,9 +1290,63 @@ Required Parameters:
 
 Optional Parameters:
 
-- expires
 - label
+
+    An optional label for this key.
+
 - token
+
+    Required when two-factor authentication is enabled.
+
+- expires
+
+    Number of hours the key will remain valid, between 0 and 8760. 0 means no expiration. Defaults to 168.
+
+## image Methods
+
+### image\_delete
+
+Deletes a gold-master image
+
+Required Parameters:
+
+- imageid
+
+    The ID of the gold-master image to delete
+
+### image\_list
+
+Lists available gold-master images
+
+Optional Parameters:
+
+- imageid
+
+    Request information for a specific gold-master image
+
+- pending
+
+    Show images currently being created.
+
+### image\_update
+
+Update an Image record.
+
+Required Parameters:
+
+- imageid
+
+    The ID of the Image to modify.
+
+Optional Parameters:
+
+- label
+
+    The label of the Image.
+
+- description
+
+    An optional description of the Image.
 
 # AUTHORS
 
