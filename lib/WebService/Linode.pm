@@ -13,6 +13,7 @@ our $VERSION = '0.26';
 our @ISA     = ("WebService::Linode::Base");
 our $AUTOLOAD;
 
+# beginvalidation
 my $validation = {
     account => {
         estimateinvoice => [ [ 'mode' ], [qw( linodeid paymentterm planid )] ],
@@ -120,6 +121,7 @@ my $validation = {
         getapikey => [ [ 'password', 'username' ], [qw( expires label token )] ],
     },
 };
+# endvalidation
 
 sub AUTOLOAD {
     ( my $name = $AUTOLOAD ) =~ s/.+:://;
