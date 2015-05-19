@@ -51,7 +51,7 @@ my $validation = {
     },
     linode => {
         boot => [ [ 'linodeid' ], [ 'configid' ] ],
-        clone => [ [qw( datacenterid linodeid planid )], [ 'paymentterm' ] ],
+        clone => [ [qw( datacenterid linodeid planid )], [ 'hypervisor', 'paymentterm' ] ],
         create => [ [ 'datacenterid', 'planid' ], [ 'paymentterm' ] ],
         delete => [ [ 'linodeid' ], [ 'skipchecks' ] ],
         list => [ [], [ 'linodeid' ] ],
@@ -63,10 +63,10 @@ my $validation = {
         webconsoletoken => [ [ 'linodeid' ], [] ],
     },
     linode_config => {
-        create => [ [qw( disklist kernelid label linodeid )], [qw( comments devtmpfs_automount helper_depmod helper_disableupdatedb helper_network helper_xen ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
+        create => [ [qw( disklist kernelid label linodeid )], [qw( comments devtmpfs_automount helper_depmod helper_disableupdatedb helper_distro helper_network helper_xen ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
         delete => [ [ 'configid', 'linodeid' ], [] ],
         list => [ [ 'linodeid' ], [ 'configid' ] ],
-        update => [ [ 'configid' ], [qw( comments devtmpfs_automount disklist helper_depmod helper_disableupdatedb helper_network helper_xen kernelid label linodeid ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
+        update => [ [ 'configid' ], [qw( comments devtmpfs_automount disklist helper_depmod helper_disableupdatedb helper_distro helper_network helper_xen kernelid label linodeid ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
     },
     linode_disk => {
         create => [ [qw( label linodeid size type )], [qw( fromdistributionid isreadonly rootpass rootsshkey )] ],
@@ -107,6 +107,9 @@ my $validation = {
         delete => [ [ 'nodeid' ], [] ],
         list => [ [ 'configid' ], [ 'nodeid' ] ],
         update => [ [ 'nodeid' ], [qw( address label mode weight )] ],
+    },
+    professionalservices_scope => {
+        create => [ [], [qw( application_quantity content_management crossover current_provider customer_name database_server email_address linode_datacenter linode_plan mail_filtering mail_retrieval mail_transfer managed monitoring notes phone_number provider_access replication requested_service server_quantity system_administration ticket_number web_cache web_server webmail )] ],
     },
     stackscript => {
         create => [ [qw( distributionidlist label script )], [qw( description ispublic rev_note )] ],
@@ -394,6 +397,24 @@ Optional Parameters:
 
 =over 4
 
+=item * status
+
+0, 1, or 2 (disabled, active, edit mode)
+
+=item * ttl_sec
+
+=item * expire_sec
+
+=item * master_ips
+
+When type=slave, the zone's master DNS servers list, semicolon separated
+
+=item * lpm_displaygroup
+
+Display group in the Domain list inside the Linode DNS Manager
+
+=item * refresh_sec
+
 =item * soa_email
 
 Required when type=master
@@ -407,24 +428,6 @@ IP addresses allowed to AXFR the entire zone, semicolon separated
 =item * description
 
 Currently undisplayed.
-
-=item * status
-
-0, 1, or 2 (disabled, active, edit mode)
-
-=item * ttl_sec
-
-=item * expire_sec
-
-=item * master_ips
-
-When type=slave, the zone's master DNS servers list, semicolon separated 
-
-=item * lpm_displaygroup
-
-Display group in the Domain list inside the Linode DNS Manager
-
-=item * refresh_sec
 
 =back
 
@@ -496,7 +499,7 @@ Display group in the Domain list inside the Linode DNS Manager
 
 =item * master_ips
 
-When type=slave, the zone's master DNS servers list, semicolon separated 
+When type=slave, the zone's master DNS servers list, semicolon separated
 
 =item * axfr_ips
 
@@ -685,6 +688,8 @@ Optional Parameters:
 =item * paymentterm
 
 Subscription term in months for prepaid customers.  One of: 1, 12, or 24
+
+=item * hypervisor
 
 =back
 
@@ -942,45 +947,49 @@ Optional Parameters:
 
 Comments you wish to save along with this profile
 
-=item * helper_xen
-
-Enable the Xen filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
-
-=item * devtmpfs_automount
-
-Controls if pv_ops kernels should automount devtmpfs at boot. 
-
-=item * rootdevicecustom
-
-A custom root device setting.
-
 =item * rootdevicero
 
-Enables the 'ro' kernel flag.  Modern distros want this. 
-
-=item * helper_depmod
-
-Creates an empty modprobe file for the kernel you're booting. 
-
-=item * helper_disableupdatedb
-
-Enable the disableUpdateDB filesystem helper
-
-=item * helper_network
-
-Automatically creates network configuration files for your distro and places them into your filesystem.
+Enables the 'ro' kernel flag.  Modern distros want this.
 
 =item * rootdevicenum
 
 Which device number (1-8) that contains the root partition.  0 to utilize RootDeviceCustom.
 
-=item * runlevel
-
-One of 'default', 'single', 'binbash' 
-
 =item * ramlimit
 
 RAMLimit in MB.  0 for max.
+
+=item * helper_xen
+
+Deprecated - use helper_distro.
+
+=item * rootdevicecustom
+
+A custom root device setting.
+
+=item * devtmpfs_automount
+
+Controls if pv_ops kernels should automount devtmpfs at boot.
+
+=item * helper_distro
+
+Enable the Distro filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
+
+=item * helper_network
+
+Automatically creates network configuration files for your distro and places them into your filesystem.
+
+=item * helper_disableupdatedb
+
+Enable the disableUpdateDB filesystem helper
+
+=item * helper_depmod
+
+Creates an empty modprobe file for the kernel you're booting.
+
+=item * runlevel
+
+One of 'default', 'single', 'binbash'
 
 =back
 
@@ -1042,7 +1051,7 @@ Comments you wish to save along with this profile
 
 =item * rootdevicero
 
-Enables the 'ro' kernel flag.  Modern distros want this. 
+Enables the 'ro' kernel flag.  Modern distros want this.
 
 =item * label
 
@@ -1066,7 +1075,7 @@ RAMLimit in MB.  0 for max.
 
 =item * helper_xen
 
-Enable the Xen filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
+Deprecated - use helper_distro.
 
 =item * rootdevicecustom
 
@@ -1074,7 +1083,15 @@ A custom root device setting.
 
 =item * devtmpfs_automount
 
-Controls if pv_ops kernels should automount devtmpfs at boot. 
+Controls if pv_ops kernels should automount devtmpfs at boot.
+
+=item * helper_distro
+
+Enable the Distro filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
+
+=item * helper_depmod
+
+Creates an empty modprobe file for the kernel you're booting.
 
 =item * helper_network
 
@@ -1084,13 +1101,9 @@ Automatically creates network configuration files for your distro and places the
 
 Enable the disableUpdateDB filesystem helper
 
-=item * helper_depmod
-
-Creates an empty modprobe file for the kernel you're booting. 
-
 =item * runlevel
 
-One of 'default', 'single', 'binbash' 
+One of 'default', 'single', 'binbash'
 
 =back
 
@@ -1506,7 +1519,7 @@ The actual script
 
 =item * distributionidlist
 
-Comma delimited list of DistributionIDs that this script works on 
+Comma delimited list of DistributionIDs that this script works on
 
 =item * label
 
@@ -1586,7 +1599,7 @@ The Label for this StackScript
 
 =item * distributionidlist
 
-Comma delimited list of DistributionIDs that this script works on 
+Comma delimited list of DistributionIDs that this script works on
 
 =back
 
@@ -1620,7 +1633,7 @@ SSL certificate served by the NodeBalancer when the protocol is 'https'
 
 =item * check_body
 
-When check=http_body, a regex against the expected result body
+When check=http, a regex to match within the first 16,384 bytes of the response body
 
 =item * stickiness
 
@@ -1638,13 +1651,13 @@ Seconds to wait before considering the probe a failure. 1-30.  Must be less than
 
 Perform active health checks on the backend nodes.  One of 'connection', 'http', 'http_body'
 
-=item * ssl_key
-
-Unpassphrased private key for the SSL certificate when protocol is 'https'
-
 =item * check_attempts
 
 Number of failed probes before taking a node out of rotation. 1-30
+
+=item * ssl_key
+
+Unpassphrased private key for the SSL certificate when protocol is 'https'
 
 =item * check_interval
 
@@ -1724,7 +1737,7 @@ SSL certificate served by the NodeBalancer when the protocol is 'https'
 
 =item * check_body
 
-When check=http_body, a regex against the expected result body
+When check=http, a regex to match within the first 16,384 bytes of the response body
 
 =item * stickiness
 
@@ -1742,13 +1755,13 @@ Seconds to wait before considering the probe a failure. 1-30.  Must be less than
 
 Perform active health checks on the backend nodes.  One of 'connection', 'http', 'http_body'
 
-=item * ssl_key
-
-Unpassphrased private key for the SSL certificate when protocol is 'https'
-
 =item * check_attempts
 
 Number of failed probes before taking a node out of rotation. 1-30
+
+=item * ssl_key
+
+Unpassphrased private key for the SSL certificate when protocol is 'https'
 
 =item * check_interval
 
@@ -1772,6 +1785,10 @@ Required Parameters:
 
 =over 4
 
+=item * configid
+
+The parent ConfigID to attach this Node to
+
 =item * address
 
 The address:port combination used to communicate with this Node
@@ -1779,10 +1796,6 @@ The address:port combination used to communicate with this Node
 =item * label
 
 This backend Node's label
-
-=item * configid
-
-The parent ConfigID to attach this Node to
 
 =back
 
@@ -1963,6 +1976,102 @@ The label of the Image.
 =item * description
 
 An optional description of the Image.
+
+=back
+
+=head2 professionalservices_scope Methods
+
+=head3 professionalservices_scope_create
+
+Creates a new Professional Services scope submission
+
+Optional Parameters:
+
+=over 4
+
+=item * ticket_number
+
+=item * server_quantity
+
+How many separate servers are involved in this migration?
+
+=item * mail_filtering
+
+Services here manipulate recieved messages in various ways
+
+=item * database_server
+
+Generally used by applications to provide an organized way to capture and manipulate data
+
+=item * current_provider
+
+=item * web_cache
+
+Caching mechanisms provide temporary storage for web requests--cached content can generally be retrieved faster.
+
+=item * mail_transfer
+
+Mail transfer agents facilitate message transfer between servers
+
+=item * application_quantity
+
+How many separate applications or websites are involved in this migration?
+
+=item * email_address
+
+=item * crossover
+
+These can assist in providing reliable crossover--failures of individual components can be transparent to the application.
+
+=item * web_server
+
+These provide network protocol handling for hosting websites.
+
+=item * replication
+
+Redundant services often have shared state--replication automatically propagates state changes between individual components.
+
+=item * provider_access
+
+What types of server access do you have at your current provider?
+
+=item * webmail
+
+Access and administrate mail via web interfaces
+
+=item * phone_number
+
+=item * content_management
+
+Centralized interfaces for editing, organizing, and publishing content
+
+=item * mail_retrieval
+
+User mail clients connect to these to retrieve delivered mail
+
+=item * managed
+
+=item * requested_service
+
+=item * monitoring
+
+Constant monitoring of your deployed systems--these can also provide automatic notifications for service failures.
+
+=item * notes
+
+=item * linode_datacenter
+
+Which datacenters would you like your Linodes to be deployed in?
+
+=item * customer_name
+
+=item * linode_plan
+
+Which Linode plans would you like to deploy?
+
+=item * system_administration
+
+Various web interfaces for performing system administration tasks
 
 =back
 
