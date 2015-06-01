@@ -5,6 +5,7 @@ Revision history for Perl module WebService::Linode
       - optional hypervisor argument to linode_clone
       - linode_config_create & _update helper_xen deprecated in favor of
         new arg helper_distro
+      - optional virt_mode arg to linode_config_create & linode_config_update
     - New method group professionalservices_scope
     - Node balancer health check 'http_body' renamed to 'http' to reflect that
       it now only checks the first 16K of the response

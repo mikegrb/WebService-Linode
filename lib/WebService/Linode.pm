@@ -63,10 +63,10 @@ my $validation = {
         webconsoletoken => [ [ 'linodeid' ], [] ],
     },
     linode_config => {
-        create => [ [qw( disklist kernelid label linodeid )], [qw( comments devtmpfs_automount helper_depmod helper_disableupdatedb helper_distro helper_network helper_xen ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
+        create => [ [qw( disklist kernelid label linodeid )], [qw( comments devtmpfs_automount helper_depmod helper_disableupdatedb helper_distro helper_network helper_xen ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel virt_mode )] ],
         delete => [ [ 'configid', 'linodeid' ], [] ],
         list => [ [ 'linodeid' ], [ 'configid' ] ],
-        update => [ [ 'configid' ], [qw( comments devtmpfs_automount disklist helper_depmod helper_disableupdatedb helper_distro helper_network helper_xen kernelid label linodeid ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel )] ],
+        update => [ [ 'configid' ], [qw( comments devtmpfs_automount disklist helper_depmod helper_disableupdatedb helper_distro helper_network helper_xen kernelid label linodeid ramlimit rootdevicecustom rootdevicenum rootdevicero runlevel virt_mode )] ],
     },
     linode_disk => {
         create => [ [qw( label linodeid size type )], [qw( fromdistributionid isreadonly rootpass rootsshkey )] ],
@@ -951,6 +951,10 @@ Comments you wish to save along with this profile
 
 Enables the 'ro' kernel flag.  Modern distros want this.
 
+=item * virt_mode
+
+Controls the virtualization mode. One of 'paravirt', 'fullvirt'
+
 =item * rootdevicenum
 
 Which device number (1-8) that contains the root partition.  0 to utilize RootDeviceCustom.
@@ -975,6 +979,10 @@ Controls if pv_ops kernels should automount devtmpfs at boot.
 
 Enable the Distro filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
 
+=item * helper_depmod
+
+Creates an empty modprobe file for the kernel you're booting.
+
 =item * helper_network
 
 Automatically creates network configuration files for your distro and places them into your filesystem.
@@ -982,10 +990,6 @@ Automatically creates network configuration files for your distro and places the
 =item * helper_disableupdatedb
 
 Enable the disableUpdateDB filesystem helper
-
-=item * helper_depmod
-
-Creates an empty modprobe file for the kernel you're booting.
 
 =item * runlevel
 
@@ -1056,6 +1060,10 @@ Enables the 'ro' kernel flag.  Modern distros want this.
 =item * label
 
 The Label for this profile
+
+=item * virt_mode
+
+Controls the virtualization mode. One of 'paravirt', 'fullvirt'
 
 =item * rootdevicenum
 
