@@ -162,6 +162,21 @@ Required Parameters:
 
 Optional Parameters:
 
+- status
+
+    0, 1, or 2 (disabled, active, edit mode)
+
+- ttl\_sec
+- expire\_sec
+- master\_ips
+
+    When type=slave, the zone's master DNS servers list, semicolon separated
+
+- lpm\_displaygroup
+
+    Display group in the Domain list inside the Linode DNS Manager
+
+- refresh\_sec
 - soa\_email
 
     Required when type=master
@@ -174,22 +189,6 @@ Optional Parameters:
 - description
 
     Currently undisplayed.
-
-- status
-
-    0, 1, or 2 (disabled, active, edit mode)
-
-- ttl\_sec
-- expire\_sec
-- master\_ips
-
-    When type=slave, the zone's master DNS servers list, semicolon separated 
-
-- lpm\_displaygroup
-
-    Display group in the Domain list inside the Linode DNS Manager
-
-- refresh\_sec
 
 ### domain\_delete
 
@@ -242,7 +241,7 @@ Optional Parameters:
 
 - master\_ips
 
-    When type=slave, the zone's master DNS servers list, semicolon separated 
+    When type=slave, the zone's master DNS servers list, semicolon separated
 
 - axfr\_ips
 
@@ -379,6 +378,8 @@ Optional Parameters:
 - paymentterm
 
     Subscription term in months for prepaid customers.  One of: 1, 12, or 24
+
+- hypervisor
 
 ### linode\_create
 
@@ -569,45 +570,53 @@ Optional Parameters:
 
     Comments you wish to save along with this profile
 
-- helper\_xen
-
-    Enable the Xen filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
-
-- devtmpfs\_automount
-
-    Controls if pv\_ops kernels should automount devtmpfs at boot. 
-
-- rootdevicecustom
-
-    A custom root device setting.
-
 - rootdevicero
 
-    Enables the 'ro' kernel flag.  Modern distros want this. 
+    Enables the 'ro' kernel flag.  Modern distros want this.
 
-- helper\_depmod
+- virt\_mode
 
-    Creates an empty modprobe file for the kernel you're booting. 
-
-- helper\_disableupdatedb
-
-    Enable the disableUpdateDB filesystem helper
-
-- helper\_network
-
-    Automatically creates network configuration files for your distro and places them into your filesystem.
+    Controls the virtualization mode. One of 'paravirt', 'fullvirt'
 
 - rootdevicenum
 
     Which device number (1-8) that contains the root partition.  0 to utilize RootDeviceCustom.
 
-- runlevel
-
-    One of 'default', 'single', 'binbash' 
-
 - ramlimit
 
     RAMLimit in MB.  0 for max.
+
+- helper\_xen
+
+    Deprecated - use helper\_distro.
+
+- rootdevicecustom
+
+    A custom root device setting.
+
+- devtmpfs\_automount
+
+    Controls if pv\_ops kernels should automount devtmpfs at boot.
+
+- helper\_distro
+
+    Enable the Distro filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
+
+- helper\_depmod
+
+    Creates an empty modprobe file for the kernel you're booting.
+
+- helper\_network
+
+    Automatically creates network configuration files for your distro and places them into your filesystem.
+
+- helper\_disableupdatedb
+
+    Enable the disableUpdateDB filesystem helper
+
+- runlevel
+
+    One of 'default', 'single', 'binbash'
 
 ### linode\_config\_delete
 
@@ -647,11 +656,15 @@ Optional Parameters:
 - linodeid
 - rootdevicero
 
-    Enables the 'ro' kernel flag.  Modern distros want this. 
+    Enables the 'ro' kernel flag.  Modern distros want this.
 
 - label
 
     The Label for this profile
+
+- virt\_mode
+
+    Controls the virtualization mode. One of 'paravirt', 'fullvirt'
 
 - rootdevicenum
 
@@ -671,7 +684,7 @@ Optional Parameters:
 
 - helper\_xen
 
-    Enable the Xen filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
+    Deprecated - use helper\_distro.
 
 - rootdevicecustom
 
@@ -679,7 +692,15 @@ Optional Parameters:
 
 - devtmpfs\_automount
 
-    Controls if pv\_ops kernels should automount devtmpfs at boot. 
+    Controls if pv\_ops kernels should automount devtmpfs at boot.
+
+- helper\_distro
+
+    Enable the Distro filesystem helper.  Corrects fstab and inittab/upstart entries depending on the kernel you're booting.  You want this.
+
+- helper\_depmod
+
+    Creates an empty modprobe file for the kernel you're booting.
 
 - helper\_network
 
@@ -689,13 +710,9 @@ Optional Parameters:
 
     Enable the disableUpdateDB filesystem helper
 
-- helper\_depmod
-
-    Creates an empty modprobe file for the kernel you're booting. 
-
 - runlevel
 
-    One of 'default', 'single', 'binbash' 
+    One of 'default', 'single', 'binbash'
 
 ## linode\_disk Methods
 
@@ -995,7 +1012,7 @@ Required Parameters:
 
 - distributionidlist
 
-    Comma delimited list of DistributionIDs that this script works on 
+    Comma delimited list of DistributionIDs that this script works on
 
 - label
 
@@ -1051,7 +1068,7 @@ Optional Parameters:
 - description
 - distributionidlist
 
-    Comma delimited list of DistributionIDs that this script works on 
+    Comma delimited list of DistributionIDs that this script works on
 
 ## nodeblancer Methods
 
@@ -1077,7 +1094,7 @@ Optional Parameters:
 
 - check\_body
 
-    When check=http\_body, a regex against the expected result body
+    When check=http, a regex to match within the first 16,384 bytes of the response body
 
 - stickiness
 
@@ -1095,13 +1112,13 @@ Optional Parameters:
 
     Perform active health checks on the backend nodes.  One of 'connection', 'http', 'http\_body'
 
-- ssl\_key
-
-    Unpassphrased private key for the SSL certificate when protocol is 'https'
-
 - check\_attempts
 
     Number of failed probes before taking a node out of rotation. 1-30
+
+- ssl\_key
+
+    Unpassphrased private key for the SSL certificate when protocol is 'https'
 
 - check\_interval
 
@@ -1161,7 +1178,7 @@ Optional Parameters:
 
 - check\_body
 
-    When check=http\_body, a regex against the expected result body
+    When check=http, a regex to match within the first 16,384 bytes of the response body
 
 - stickiness
 
@@ -1179,13 +1196,13 @@ Optional Parameters:
 
     Perform active health checks on the backend nodes.  One of 'connection', 'http', 'http\_body'
 
-- ssl\_key
-
-    Unpassphrased private key for the SSL certificate when protocol is 'https'
-
 - check\_attempts
 
     Number of failed probes before taking a node out of rotation. 1-30
+
+- ssl\_key
+
+    Unpassphrased private key for the SSL certificate when protocol is 'https'
 
 - check\_interval
 
@@ -1205,6 +1222,10 @@ Optional Parameters:
 
 Required Parameters:
 
+- configid
+
+    The parent ConfigID to attach this Node to
+
 - address
 
     The address:port combination used to communicate with this Node
@@ -1212,10 +1233,6 @@ Required Parameters:
 - label
 
     This backend Node's label
-
-- configid
-
-    The parent ConfigID to attach this Node to
 
 Optional Parameters:
 
@@ -1347,6 +1364,90 @@ Optional Parameters:
 - description
 
     An optional description of the Image.
+
+## professionalservices\_scope Methods
+
+### professionalservices\_scope\_create
+
+Creates a new Professional Services scope submission
+
+Optional Parameters:
+
+- ticket\_number
+- server\_quantity
+
+    How many separate servers are involved in this migration?
+
+- mail\_filtering
+
+    Services here manipulate recieved messages in various ways
+
+- database\_server
+
+    Generally used by applications to provide an organized way to capture and manipulate data
+
+- current\_provider
+- web\_cache
+
+    Caching mechanisms provide temporary storage for web requests--cached content can generally be retrieved faster.
+
+- mail\_transfer
+
+    Mail transfer agents facilitate message transfer between servers
+
+- application\_quantity
+
+    How many separate applications or websites are involved in this migration?
+
+- email\_address
+- crossover
+
+    These can assist in providing reliable crossover--failures of individual components can be transparent to the application.
+
+- web\_server
+
+    These provide network protocol handling for hosting websites.
+
+- replication
+
+    Redundant services often have shared state--replication automatically propagates state changes between individual components.
+
+- provider\_access
+
+    What types of server access do you have at your current provider?
+
+- webmail
+
+    Access and administrate mail via web interfaces
+
+- phone\_number
+- content\_management
+
+    Centralized interfaces for editing, organizing, and publishing content
+
+- mail\_retrieval
+
+    User mail clients connect to these to retrieve delivered mail
+
+- managed
+- requested\_service
+- monitoring
+
+    Constant monitoring of your deployed systems--these can also provide automatic notifications for service failures.
+
+- notes
+- linode\_datacenter
+
+    Which datacenters would you like your Linodes to be deployed in?
+
+- customer\_name
+- linode\_plan
+
+    Which Linode plans would you like to deploy?
+
+- system\_administration
+
+    Various web interfaces for performing system administration tasks
 
 # AUTHORS
 

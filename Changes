@@ -1,6 +1,8 @@
 Revision history for Perl module WebService::Linode
 
 {{$NEXT}}
+
+0.28  2015-05-31 21:45:26 EDT
     - API KVM support:
       - optional hypervisor argument to linode_clone
       - linode_config_create & _update helper_xen deprecated in favor of
